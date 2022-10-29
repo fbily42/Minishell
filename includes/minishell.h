@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 13:59:43 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/10/28 22:05:52 by fbily            ###   ########.fr       */
+/*   Updated: 2022/10/29 18:04:39 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ typedef struct s_pipex
 void	init_vars(t_pipex *pipex, char **envp, t_node *tree);
 void	clean_struct(t_pipex *pipex);
 void	execute_cmd(t_pipex *pipex, t_node *tree);
-void	open_files(t_pipex *pipex, t_node *tree);
+bool	open_files(t_pipex *pipex, t_node *tree);
 bool	open_file_in(t_pipex *pipex, t_node *tree);
 bool	open_file_out(t_pipex *pipex, t_node *tree);
 void	free_2d(char **str);
@@ -127,6 +127,7 @@ char	*strjoin_and_free_s2(char *s1, char *s2);
 bool	redirect_in(int new_in);
 bool	redirect_out( int new_out);
 void	ft_close(t_pipex *pipex);
+bool	error_msg(t_pipex *pipex, char *argv);
 
 /* --- token.c --- */
 int		add_token(t_token **tokens, t_token *token);

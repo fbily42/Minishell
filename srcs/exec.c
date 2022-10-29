@@ -6,12 +6,11 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 09:52:35 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/10/28 22:06:16 by fbily            ###   ########.fr       */
+/*   Updated: 2022/10/29 18:11:19 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 void	init_pipe(t_pipex *pipex)
 {
@@ -74,14 +73,8 @@ void	execute_cmd(t_pipex *pipex, t_node *tree)
 {
 	if (pipex->fd_in != -1)
 		redirect_in(pipex->fd_in);
-	else if (pipex->nb_cmd != 1 && pipex->pipe[pipex->pipe_index % 3][0] != -1)
-		redirect_in(pipex->pipe[pipex->pipe_index % 3][0]);
 	if (pipex->fd_out != -1)
 		redirect_out(pipex->fd_out);
-	else if (pipex->nb_cmd != 1
-		&& pipex->pipe[pipex->pipe_index % 3 + 1][1] != -1)
-		redirect_out(pipex->fd_out);
-	ft_close(pipex);
 	if (find_cmd(pipex, tree) == true)
 		execve(pipex->cmd, tree->data.c.value, pipex->envp);
 	else
@@ -99,7 +92,7 @@ bool	redirect_in(int new_in)
 	return (true);
 }
 
-bool	redirect_out( int new_out)
+bool	redirect_out(int new_out)
 {
 	if (dup2(new_out, STDOUT_FILENO) == -1)
 	{
@@ -109,12 +102,19 @@ bool	redirect_out( int new_out)
 	return (true);
 }
 
-void	open_files(t_pipex *pipex, t_node *tree)
+bool	open_files(t_pipex *pipex, t_node *tree)
 {
 	if (tree->type == REDIRIN)
-		open_file_in(pipex, tree);
+	{
+		if (open_file_in(pipex, tree) == false)
+			return (false);
+	}
 	else if (tree->type == REDIROUT)
-		open_file_out(pipex, tree);
+	{
+		if (open_file_out(pipex, tree) == false)
+			return (false);
+	}
+	return (true);
 }
 //Gerer erreurs files -> exit(FAILURE)
 
@@ -251,8 +251,6 @@ Return : FALSE if something wrong happened.
 */
 bool	find_cmd(t_pipex *pipex, t_node *tree)
 {
-	if (tree->data.c.value[0][0] == '.' && tree->data.c.value[0][1] == '/')
-		return (print_error_dir(pipex, tree->data.c.value[0]), false);
 	if (access(tree->data.c.value[0], F_OK | X_OK) == 0)
 	{
 		pipex->cmd = ft_strdup(tree->data.c.value[0]);
@@ -262,6 +260,8 @@ bool	find_cmd(t_pipex *pipex, t_node *tree)
 	}
 	if (*pipex->envp != NULL && pipex->my_paths != NULL)
 	{
+		if (error_msg(pipex, tree->data.c.value[0]) == false)
+			return (false);
 		if (check_path_cmd(pipex, tree) == true)
 			return (true);
 	}
@@ -284,7 +284,16 @@ bool	check_path_cmd(t_pipex *pipex, t_node *tree)
 		pipex->cmd = ft_strjoin(pipex->my_paths[i], tree->data.c.value[0]);
 		if (pipex->cmd == NULL)
 			return (false);
-		if (access(pipex->cmd, F_OK | X_OK) == 0)
+		if (access(pipex->cmd, F_OK | X_OK) == 0
+			&& ((tree->data.c.value[0][0] == '.'
+				&& tree->data.c.value[0][1] == '/')
+					|| tree->data.c.value[0][0] == '/'))
+		{
+			perror(pipex->error);
+			clean_struct(pipex);
+			exit(127);
+		}
+		else if (access(pipex->cmd, F_OK | X_OK) == 0)
 			return (true);
 		else
 			free (pipex->cmd);
@@ -300,7 +309,7 @@ Print message "Pipex: ARGV: Commant not found\n"
 void	print_error_cmd(t_pipex *pipex, char *argv)
 {
 	pipex->error = ft_strjoin(argv, ": Command not found\n");
-	pipex->error = strjoin_and_free_s2("Pipex: ", pipex->error);
+	pipex->error = strjoin_and_free_s2("PopCornShell: ", pipex->error);
 	if (!pipex->error)
 		ft_putstr_fd("Error malloc\n", STDERR_FILENO);
 	ft_putstr_fd(pipex->error, STDERR_FILENO);
@@ -308,18 +317,15 @@ void	print_error_cmd(t_pipex *pipex, char *argv)
 	pipex->error = NULL;
 }
 
-/*
-Print message "Pipex: ARGV: No such file or directory\n"
-*/
-void	print_error_dir(t_pipex *pipex, char *argv)
+bool	error_msg(t_pipex *pipex, char *argv)
 {
-	pipex->error = ft_strjoin(argv, ": No such file or directory\n");
-	pipex->error = strjoin_and_free_s2("Pipex: ", pipex->error);
+	pipex->error = ft_strjoin("PopCornShell : ", argv);
 	if (!pipex->error)
+	{
 		ft_putstr_fd("Error malloc\n", STDERR_FILENO);
-	ft_putstr_fd(pipex->error, STDERR_FILENO);
-	free(pipex->error);
-	pipex->error = NULL;
+		return (false);
+	}
+	return (true);
 }
 
 /*

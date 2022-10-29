@@ -6,11 +6,12 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/27 20:06:43 by fbily             #+#    #+#             */
-/*   Updated: 2022/10/28 22:05:14 by fbily            ###   ########.fr       */
+/*   Updated: 2022/10/29 18:11:35 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 char	**g_minishell_env;
 
 void	visit(t_node *tree, int value, t_pipex *pipex)
@@ -37,13 +38,12 @@ void	visit(t_node *tree, int value, t_pipex *pipex)
 	if (tree->type == REDIRIN || tree->type == REDIROUT)
 	{
 		if (pipex->pids[pipex->child_count - 1] == 0)
-			open_files(pipex, tree);
+			if (open_files(pipex, tree) == false)
+				exit(EXIT_FAILURE);
 		return ;
 	}
 	if (tree->type == PIPE)
 	{
-		pipex->pipe_index = tree->data.b.index;
-		pipe(pipex->pipe[tree->data.b.index % 3]);
 		value = 0;
 	}
 	visit(tree->data.b.left, value, pipex);
@@ -94,7 +94,7 @@ int	main(int argc, char **argv, char **envp)
 	init_signal();
 	while (1)
 	{
-		line = readline("🍿PopCornshell >> ");
+		line = readline("🍿PopCornShell >> ");
 		if (line == NULL)
 		{
 			write(1, "exit\n", 5);
