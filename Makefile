@@ -6,13 +6,13 @@
 #    By: fbily <fbily@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/19 14:13:03 by sbeylot           #+#    #+#              #
-#    Updated: 2022/10/27 23:29:58 by fbily            ###   ########.fr        #
+#    Updated: 2022/10/31 17:13:59 by fbily            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # BASE INFO
 NAME		=	minishell	
-CC			=	clang
+#CC			=	gcc
 CFLAGS		=	-Wall -Wextra -Werror 
 # SRCS
 SRCS_NAME	=	main_flo.c\
@@ -80,7 +80,7 @@ run: all
 	@./$(NAME)
 
 debug: info compile_libft 
-	@$(CC) $(HEADER_INC) $(HEADER_INC_LIBFT) $(SRCS) -o $(NAME) $(READLINE) $(LIBFT) -g3 -fsanitize=address 
+	@$(CC) -g3 $(HEADER_INC) $(HEADER_INC_LIBFT) $(SRCS) -o $(NAME) $(READLINE) $(LIBFT)
 	@echo "\t\t[ $(GREEN)✓$(NONE) ] $(GREEN)$(NAME)$(NONE) for GDB ready!"
 
 $(OBJS_DIR)%.o: $(SRCS_DIR)%.c $(HEADER)

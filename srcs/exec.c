@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 09:52:35 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/10/29 18:11:19 by fbily            ###   ########.fr       */
+/*   Updated: 2022/10/31 17:48:07 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,11 @@ void	init_pipe(t_pipex *pipex)
 	i = 0;
 	while (i < 3)
 	{
-		pipex->pipe[i][0] = -1;
-		pipex->pipe[i][1] = -1;
+		if (pipe(pipex->pipe[i]) == -1)
+		{
+			perror("Pipe ");
+			exit(1);
+		}
 		i++;
 	}
 }
@@ -73,8 +76,18 @@ void	execute_cmd(t_pipex *pipex, t_node *tree)
 {
 	if (pipex->fd_in != -1)
 		redirect_in(pipex->fd_in);
+	else if (pipex->nb_cmd != 1 && pipex->child_count != 1)
+		redirect_in(pipex->pipe[pipex->pipe_index % 3][0]);
 	if (pipex->fd_out != -1)
 		redirect_out(pipex->fd_out);
+	else if (pipex->nb_cmd != 1 && pipex->child_count < pipex->nb_cmd)
+	{
+		if (pipex->child_count == 1)
+			redirect_out(pipex->pipe[0][1]);
+		else
+			redirect_out(pipex->pipe[(pipex->pipe_index + 1) % 3][1]);
+	}
+	ft_close(pipex);
 	if (find_cmd(pipex, tree) == true)
 		execve(pipex->cmd, tree->data.c.value, pipex->envp);
 	else

@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 13:59:43 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/10/29 18:04:39 by fbily            ###   ########.fr       */
+/*   Updated: 2022/10/31 18:21:53 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ bool	redirect_in(int new_in);
 bool	redirect_out( int new_out);
 void	ft_close(t_pipex *pipex);
 bool	error_msg(t_pipex *pipex, char *argv);
+void	init_pipe(t_pipex *pipex);
 
 /* --- token.c --- */
 int		add_token(t_token **tokens, t_token *token);

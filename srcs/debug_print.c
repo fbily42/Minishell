@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug_print.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 09:11:36 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/10/27 17:09:25 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/10/31 17:13:33 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,6 @@ void	print_node_cmd(t_node *node)
 
 void	print_node_redir(t_node *node)
 {
-	int	i;
-
-	i = -1;
 	if (!node)
 		return ;
 	printf("--[Type:%s", debug_node_type(node->type));
