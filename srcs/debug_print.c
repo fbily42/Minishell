@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug_print.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 09:11:36 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/10/31 17:13:33 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/02 10:07:29 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,41 @@ void	print_tree_recur(t_node *tree, int level)
 	print_tree_recur(tree->data.b.left, level + 1);
 }
 
+void	new_print_tree_recur(t_node *tree, int level)
+{
+	if (tree == NULL)
+	{
+		printtab(level);
+		printf("--[null]\n");
+		return ;
+	}
+	if (tree->type == ARG || tree->type == APPEND || tree->type == HEREDOC || \
+			tree->type == REDIRIN || tree->type == REDIROUT)
+	{
+		printtab(level);
+		if (tree->type == ARG)
+		{
+			printf("--[");
+			print_node_cmd(tree);
+			printf("]\n");
+		}
+		else
+			print_node_redir(tree);
+		return ;
+	}
+	new_print_tree_recur(tree->data.b.right, level + 1);
+	printtab(level);
+	if (tree->type == PIPE)
+		printf("[%d]", tree->data.b.index);
+	printf("--[%s]\n", debug_node_type(tree->type));
+	new_print_tree_recur(tree->data.b.left, level + 1);
+}
+
+
+
 void	tree_print(t_node *tree)
 {
 	printf("\n-------------------------------------------------------\n");
-	print_tree_recur(tree, 0);
+	new_print_tree_recur(tree, 0);
 	printf("-------------------------------------------------------\n");
 }

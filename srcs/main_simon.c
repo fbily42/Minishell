@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_simon.c                                       :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 14:01:41 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/10/27 20:06:54 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/02 20:19:58 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,103 +14,53 @@
 
 char	**g_minishell_env;
 
-int buildin_echo_simple(char **cmd)
+void	visit_redir(t_node *tree)
 {
-	int	i;
-
-	i = 1;
-	while (cmd[i])
+	if (!tree)
 	{
-		ft_putstr_fd(cmd[i], 1);
-		i++;
-		if (cmd[i] != NULL)
-			ft_putchar_fd(' ', 1);
-	}
-	ft_putendl_fd("", 1);
-	return (1);
-}
-
-int	buildin_echo_option(char **cmd)
-{
-	int	i;
-
-	i = 1;
-	while (cmd[i])
-	{
-		ft_putstr_fd(cmd[i], 1);
-		i++;
-		if (cmd[i] != NULL)
-			ft_putchar_fd(' ', 1);
-	}
-	return (1);
-}
-
-int  buildin_echo(char **cmd)
-{
-	int		i;
-
-	i = 0;
-	if (!cmd)
-		return (1);
-	if (ft_strcmp(cmd[1], "-n") == 0)
-		return (buildin_echo_option(cmd));
-	else
-		return (buildin_echo_simple(cmd));
-}
-
-void	execute_simple_cmd(t_node *node)
-{
-	pid_t	pid;
-	int		wstatus;
-
-	pid = fork();
-	if (pid == -1)
+		printf("[REDIR]\tIl n'y a plus de redirection\n");
 		return ;
-	if (pid == 0)
-	{
-		if (execve(node->data.c.value[0], node->data.c.value, g_minishell_env) == -1)
-		{
-			printf("Fail\n");
-			exit(20);
-		}
 	}
-	else
+	if (tree->type == APPEND || tree->type == REDIRIN || tree->type == REDIROUT || tree->type == HEREDOC)
 	{
-		waitpid(pid, &wstatus, 0);
-		printf("J'ai bien execute la commande\n");
+		printf("[REDIR]\tIl y a une redirection, je fait mon bail\n");
+		return ;
 	}
+	printf("[REDIR]\tJe vais a gauche\n");
+	visit_redir(tree->data.b.left);
+	printf("[REDIR]\tJe vais droite\n");
+	visit_redir(tree->data.b.right);
 }
 
-void	visit(t_node *tree, int value)
+void	visit_cmd(t_node *tree)
+{
+	printf("[CMD]\tJe suis sur une commande [CMD]\n");
+	if (tree->data.b.right == NULL)
+		printf("[CMD]\tIl n'y a pas de redirection a droite, je vais a gauche\n");
+	else if (tree->data.b.right)
+	{
+		printf("[CMD]\tIl y a une(des) redirection, je vais a droite\n");
+		visit_redir(tree->data.b.right);
+	}
+	printf("[CMD]\tJ'execute la commande\n\n");
+}
+
+void	new_visit(t_node *tree)
 {
 	if (!tree)
 		return ;
 	if (tree->type == CMD)
 	{
-		if (value == 0)
-			printf("Je Fork()\n");
-		printf("Je fais une Commande\n");
-		return ;
-	}
-	if (tree->type == REDIR && value == 0)
-	{
-		printf("Je Fork()\n");
-		value = 1;
-	}
-	if (tree->type == REDIRIN || tree->type == REDIROUT)
-	{
-		printf("Je redirige\n");
+		visit_cmd(tree);
 		return ;
 	}
 	if (tree->type == PIPE)
-		value = 0;
-	printf("Je vais a Gauche\n");
-	visit(tree->data.b.left, value);
-	printf("Je vais a Droite\n");
-	visit(tree->data.b.right, value);
-	printf("Je remonte\n");
+		printf("[PIPE]\tJe suis sur un pipe, je vais a gauche\n\n");
+	new_visit(tree->data.b.left);
+	printf("[PIPE]\tJ'ai execute a gauche, je vais a droite\n\n");
+	new_visit(tree->data.b.right);
 }
-
+		
 int	main(int argc, char **argv, char **envp)
 {
 	/* --- FT_MALLOCATOR TEST -----------------------------------
@@ -184,12 +134,12 @@ int	main(int argc, char **argv, char **envp)
 	------ TOKEN --------------------------------------------- */
 	/* --- MAIN -------------------------------------------------
 	------ MAIN ---------------------------------------------- */
-	char	*line;
-	t_node	*tree;
-
 	(void)argc;
 	(void)argv;
+	char	*line;
+	t_node	*tree;
 	g_minishell_env = envp;
+
 	line = NULL;
 	tree = NULL;
 	init_signal();
@@ -203,9 +153,9 @@ int	main(int argc, char **argv, char **envp)
 		}
 		else if (*line && line[0])
 			add_history(line);
-		tree = parsing(line);
+		tree = new_parsing(line);
 		tree_print(tree);
-		visit(tree, 0);
+		new_visit(tree);
 		clean_tree(&tree);
 		free(line);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_node_redir.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 09:18:40 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/10/28 20:46:39 by fbily            ###   ########.fr       */
+/*   Updated: 2022/10/26 12:25:55 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ t_node	*node_redirection(t_node **tree, t_token **token)
 	if (!node)
 		return (clean_tree(tree), NULL);
 	node->type = REDIR;
-//	node->index = 0;
 	node->data.b.left = init_redir(token);
 	if (!node->data.b.left)
 		return (free(node), clean_tree(tree), NULL);

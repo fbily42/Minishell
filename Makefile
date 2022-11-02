@@ -6,13 +6,13 @@
 #    By: fbily <fbily@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/19 14:13:03 by sbeylot           #+#    #+#              #
-#    Updated: 2022/10/31 17:13:59 by fbily            ###   ########.fr        #
+#    Updated: 2022/11/02 21:05:41 by fbily            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # BASE INFO
 NAME		=	minishell	
-#CC			=	gcc
+CC			=	cc
 CFLAGS		=	-Wall -Wextra -Werror 
 # SRCS
 SRCS_NAME	=	main_flo.c\
@@ -28,6 +28,7 @@ SRCS_NAME	=	main_flo.c\
 				word_expansion_utils.c\
 				word_expansion_utils2.c\
 				split_dollar.c\
+				ast_new.c\
 				ast_node_cmd.c\
 				ast_node_cmd_utils.c\
 				ast_node_redir.c\
@@ -38,7 +39,8 @@ SRCS_NAME	=	main_flo.c\
 				scanning.c\
 				parsing.c\
 				signal.c\
-				exec.c
+				exec.c\
+				exec_utils.c
 
 SRCS_DIR	=	srcs/
 SRCS		=	$(addprefix $(SRCS_DIR), $(SRCS_NAME))
@@ -73,14 +75,14 @@ $(NAME): $(OBJS) $(HEADER)
 	@$(CC) $(CFLAGS) $(HEADER_INC) $(HEADER_INC_LIBFT) $(OBJS) $(READLINE) $(LIBFT) -o $(NAME)
 
 malloc_test: compile_libft $(OBJS) $(HEADER)
-	$(CC) $(CFLAGS) -g -fsanitize=undefined -rdynamic -o $@ $(OBJS) $(HEADER_INC) $(HEADER_INC_LIBFT) $(LIBFT) $(READLINE) -L. -lmallocator
+	$clang $(CFLAGS) -g -fsanitize=undefined -rdynamic -o $@ $(OBJS) $(HEADER_INC) $(HEADER_INC_LIBFT) $(LIBFT) $(READLINE) -L. -lmallocator
    
 
 run: all
 	@./$(NAME)
 
 debug: info compile_libft 
-	@$(CC) -g3 $(HEADER_INC) $(HEADER_INC_LIBFT) $(SRCS) -o $(NAME) $(READLINE) $(LIBFT)
+	@$(CC) $(HEADER_INC) $(HEADER_INC_LIBFT) $(SRCS) -o $(NAME) $(READLINE) $(LIBFT) -g3 -fsanitize=address 
 	@echo "\t\t[ $(GREEN)✓$(NONE) ] $(GREEN)$(NAME)$(NONE) for GDB ready!"
 
 $(OBJS_DIR)%.o: $(SRCS_DIR)%.c $(HEADER)

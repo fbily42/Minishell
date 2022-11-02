@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/26 13:42:23 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/10/28 15:58:10 by fbily            ###   ########.fr       */
+/*   Updated: 2022/10/26 13:56:58 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ void	handle_sigint(int signum, siginfo_t *info, void *i)
 
 void	init_signal(void)
 {
-	struct sigaction	sa_int;
-	struct sigaction	sa_quit;
-
+	struct sigaction sa_int;
+	struct sigaction sa_quit;
+	
 	sa_int = (struct sigaction){0};
 	sa_int.sa_sigaction = &handle_sigint;
 	sa_int.sa_flags = SA_SIGINFO;

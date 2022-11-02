@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 15:22:45 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/10/28 21:32:43 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/02 10:09:24 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,10 @@ t_node	*parsing(char *line)
 	tokenizer(line, &token);
 	if (!token)
 		return (NULL);
-//	token_print(token);
+	//token_print(token);
 	tree = parse_pipe(&token);
 	if (!tree)
 		return (free_token(&token), NULL);
-//	tree_print(tree);
 	return (tree);
 }
 
@@ -63,7 +62,7 @@ t_node	*parse_pipe(t_token **token)
 	t_node	*node;
 	int		index;
 
-	index = 0;
+	index = 1;
 	node = parse_redir(token);
 	if (!node)
 		return (NULL);

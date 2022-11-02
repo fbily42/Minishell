@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 09:10:19 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/10/25 14:58:52 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/02 10:53:58 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	clean_tree(t_node **tree)
 		return ;
 	if (*tree == NULL)
 		return ;
-	if ((*tree)->type == CMD)
+	if ((*tree)->type == ARG)
 	{
 		clean_cmd_node(tree);
 		return ;

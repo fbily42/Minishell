@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 11:03:15 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/10/26 15:54:35 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/10/28 11:53:26 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	tokenizer(char *line, t_token **tokens)
 		else if (is_ignored(peek(itr)))
 			next(&itr);
 			*/
-		if (is_symbol(itr))
+		else if (is_symbol(itr))
 		{
 			if (!add_token(tokens, token_symbol(&itr)))
 				return (free_token(tokens));
