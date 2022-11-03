@@ -6,7 +6,7 @@
 #    By: fbily <fbily@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/19 14:13:03 by sbeylot           #+#    #+#              #
-#    Updated: 2022/11/02 21:05:41 by fbily            ###   ########.fr        #
+#    Updated: 2022/11/03 19:43:42 by fbily            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,10 @@ SRCS_NAME	=	main_flo.c\
 				parsing.c\
 				signal.c\
 				exec.c\
-				exec_utils.c
+				exec_utils.c\
+				exec_redir_utils.c\
+				exec_error_utils.c\
+				exec_cmd_utils.c
 
 SRCS_DIR	=	srcs/
 SRCS		=	$(addprefix $(SRCS_DIR), $(SRCS_NAME))
