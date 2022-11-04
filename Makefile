@@ -6,7 +6,7 @@
 #    By: fbily <fbily@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/19 14:13:03 by sbeylot           #+#    #+#              #
-#    Updated: 2022/11/04 10:57:16 by sbeylot          ###   ########.fr        #
+#    Updated: 2022/11/04 20:35:08 by fbily            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,9 @@ SRCS_NAME	=	main_flo.c\
 				exec_utils.c\
 				exec_redir_utils.c\
 				exec_error_utils.c\
-				exec_cmd_utils.c
+				exec_cmd_utils.c\
+				here_doc.c\
+				built_in.c
 
 SRCS_DIR	=	srcs/
 SRCS		=	$(addprefix $(SRCS_DIR), $(SRCS_NAME))
@@ -96,6 +98,7 @@ clean:
 	@echo "\t\t[ $(RED)✗$(NONE) ] objs/ directory"
 
 fclean: clean
+	@make fclean -C ./libft
 	@rm -f $(NAME)
 	@rm -rf gmon.out
 	@echo "\t\t[ $(GREEN)✓$(NONE) ] Project $(GREEN)$(NAME)$(NONE) clean"
