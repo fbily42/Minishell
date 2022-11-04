@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 08:43:36 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/02 10:43:18 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/04 10:33:26 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,9 @@ char	**ft_dollar_malloc_tab(char const *s);
 char	**ft_split_dollar(char const *s);
 
 /* --- ast_node_cmd.c --- */
-t_node	*node_cmd(t_token **token, t_node **tree);
+t_node	*node_arg(t_token **token);
+t_node	*node_pipe(t_node **tree, t_token **token);
+t_node	*node_redirection(t_token **token);
 char	**init_cmd(t_token **token);
 int		cmd_length(t_token *token);
 
@@ -162,11 +164,9 @@ int		nbr_new_argument(t_token **token);
 int		update_cmd(t_token **token, t_node *tree);
 
 /* --- ast_node_redir.c --- */
-t_node	*node_redirection(t_node **tree, t_token **token);
-t_node	*node_pipe(t_node **tree);
-t_node	*init_redir(t_token **token);
 
 /* --- ast_node_redir_utils.c --- */
+t_node	*init_redir(t_token **token);
 void	init_node_redir(t_node **node);
 void	assign_ionumber(t_node **node, t_token **token);
 int		valid_redir(t_token *token);
@@ -193,9 +193,9 @@ void	eat_token(t_token **token);
 t_node	*parsing(char *line);
 t_node	*parse_redir(t_token **token);
 t_node	*parse_pipe(t_token **token);
+t_node	*parse_cmd(t_token **token);
 
 /* --- main (futur clean.c) --- */
-t_node	*node_pipe(t_node **tree);
 
 /* --- debug_print.c --- */
 void	print_node_cmd(t_node *node);
@@ -208,12 +208,10 @@ void	new_print_tree_recur(t_node *tree, int level);
 /* --- signal.c --- */
 void	init_signal(void);
 
-/* --- ast_new.c --- */
-t_node	*new_parsing(char *line);
-t_node	*new_parse_cmd(t_token **token);
-t_node	*new_node_redirection(t_token **token);
-t_node	*new_node_arg(t_token **token);
-t_node	*new_parse_pipe(t_token **token);
-t_node	*new_node_pipe(t_node **tree, t_token **token);
+/* --- error.c --- */
+int	print_error_syntax(void);
+
+/* --- buildin_pwd.c --- */
+void	buildin_pwd(void);
 
 #endif

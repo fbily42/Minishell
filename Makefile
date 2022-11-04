@@ -6,7 +6,7 @@
 #    By: fbily <fbily@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/19 14:13:03 by sbeylot           #+#    #+#              #
-#    Updated: 2022/11/03 19:43:42 by fbily            ###   ########.fr        #
+#    Updated: 2022/11/04 10:34:29 by sbeylot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,10 +28,8 @@ SRCS_NAME	=	main_flo.c\
 				word_expansion_utils.c\
 				word_expansion_utils2.c\
 				split_dollar.c\
-				ast_new.c\
 				ast_node_cmd.c\
 				ast_node_cmd_utils.c\
-				ast_node_redir.c\
 				ast_node_redir_utils.c\
 				node_utils.c\
 				clean.c\

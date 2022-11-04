@@ -6,52 +6,79 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:24:06 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/10/26 12:00:52 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/04 10:31:29 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*
- *	t_node	*node_cmd(t_token **token, t_node **tree)
- *	@token:		Token list
- *	@tree:		Abstract Synthax Tree
- *	||	Create a CMD node or create REDIR & REDIR_INFO Node for the tree 
- *
- *	char	**init_cmd(t_token **token)
- *	@token:		Token List
- *	||	Init the variable of the command node
- *
- * int		cmd_length(t_token *token)
- * @token:		Token list
- * ||	Return the length needed for the cmd array
- */
-
-t_node	*node_cmd(t_token **token, t_node **tree)
+t_node	*node_arg(t_token **token)
 {
 	t_node	*node;
 
-	node = NULL;
-	if (*token && is_cmd_token(*token))
+	if (*token && is_redirection_token(*token))
+		node = node_redirection(token);
+	else if (*token && is_cmd_token(*token))
 	{
 		node = (t_node *)malloc(sizeof(t_node));
 		if (!node)
 			return (NULL);
 		node->data.c.cmd_len = cmd_length(*token);
 		node->data.c.value = init_cmd(token);
-		node->type = CMD;
+		node->type = ARG;
 		if (!node->data.c.value)
 			return (clean_tree(&node), NULL);
-	}	
-	else if (*token && is_redirection_token(*token))
+	}
+	return (node);
+}
+
+t_node	*node_pipe(t_node **tree, t_token **token)
+{
+	t_node	*node;
+
+	node = (t_node *)malloc(sizeof(t_node));
+	if (!node)
+		return (clean_tree(tree), NULL);
+	eat_token(token);
+	node->data.b.index = 0;
+	node->type = PIPE;
+	if ((*tree)->type == CMD)
 	{
-		node = node_redirection(tree, token);
-		if (!node)
+		node->data.b.left = *tree;
+		node->data.b.right = parse_cmd(token);
+		if (!node->data.b.right)
 			return (clean_tree(&node), NULL);
-		node->data.b.right = node_cmd(token, &node);
+		*tree = node;
+		return (node);
+	}
+	else
+	{
+		node->data.b.left = get_last_pipe(*tree)->data.b.right;
+		node->data.b.right = parse_cmd(token);
+		if (!node->data.b.right)
+			return (clean_tree(tree), free(node), NULL);
+		get_last_pipe(*tree)->data.b.right = node;
+		return (*tree);
+	}
+}
+
+t_node	*node_redirection(t_token **token)
+{
+	t_node	*node;
+
+	node = (t_node *)malloc(sizeof(t_node));
+	if (!node)
+		return (NULL);
+	node->type = REDIR;
+	node->data.b.left = init_redir(token);
+	if (*token && is_redirection_token(*token))
+	{
+		node->data.b.right = node_arg(token);
 		if (!node->data.b.right)
 			return (clean_tree(&node), NULL);
 	}
+	else
+		node->data.b.right = NULL;
 	return (node);
 }
 

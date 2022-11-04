@@ -6,11 +6,28 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/20 07:43:20 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/10/25 14:56:24 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/04 10:32:25 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+t_node	*init_redir(t_token **token)
+{
+   t_node	*node;
+
+   node = (t_node *)malloc(sizeof(t_node));
+   if (!node)
+	   return (NULL);
+   init_node_redir(&node);
+   if (get_ttype(token) == IONUMBER)
+	   assign_ionumber(&node, token);
+   if (valid_redir(*token))
+	   assign_redir(&node, token);
+   else
+	   return (free(node), NULL);
+   return (node);
+}
 
 void	init_node_redir(t_node **node)
 {

@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 14:01:41 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/03 20:40:40 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/04 10:34:14 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	main(int argc, char **argv, char **envp)
 		}
 		else if (*line && line[0])
 			add_history(line);
-		tree = new_parsing(line);
+		tree = parsing(line);
 //		tree_print(tree);
 		exec(tree, envp);
 		clean_tree(&tree);
