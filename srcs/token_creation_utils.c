@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 12:13:38 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/01 20:02:22 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/04 12:37:11 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ int	add_word_len(char **itr)
 	i = 0;
 	while (has_next(*itr) && !is_whitespace(peek(*itr)))
 	{
+		if (itr_is_redirection(*itr))
+			break ;
 		if (itr_is_quote(*itr))// && peek(*itr - 1) != '\\')
 			break ;
 		i++;

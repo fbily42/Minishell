@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 11:04:06 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/10/26 13:05:47 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/04 12:40:32 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,9 @@ int	is_symbol(char *c)
 		return (HEREDOC);
 	else if (peek(c) == '>' && peek(c + 1) == '>')
 		return (APPEND);
-	else if ((ft_isalnum(peek(c)) && peek(c + 1) == '<') || peek(c) == '<')
+	else if ((ft_isdigit(peek(c)) && peek(c + 1) == '<') || peek(c) == '<')
 		return (REDIRIN);
-	else if ((ft_isalnum(peek(c)) && peek(c + 1) == '>') || peek(c) == '>')
+	else if ((ft_isdigit(peek(c)) && peek(c + 1) == '>') || peek(c) == '>')
 		return (REDIROUT);
 	else if (peek(c) == '\'')
 		return (SQUOTE);
