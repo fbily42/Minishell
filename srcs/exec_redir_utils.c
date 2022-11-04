@@ -6,13 +6,31 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 17:07:59 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/03 20:40:47 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/04 19:44:51 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 bool	update_redir(t_node *tree, t_context *ctx)
+{
+	if (tree->data.b.left->type == REDIRIN
+		|| tree->data.b.left->type == HEREDOC)
+	{
+		if (redir_in(tree, ctx) == false)
+			return (false);
+	}
+	else if (tree->data.b.left->type == REDIROUT || APPEND)
+	{
+		if (redir_out(tree, ctx) == false)
+			return (false);
+	}
+	if (tree->data.b.right != NULL)
+		update_redir(tree->data.b.right, ctx);
+	return (true);
+}
+
+bool	redir_in(t_node *tree, t_context *ctx)
 {
 	if (tree->data.b.left->type == REDIRIN)
 	{
@@ -21,7 +39,23 @@ bool	update_redir(t_node *tree, t_context *ctx)
 		if (open_file_in(ctx, tree->data.b.left) == false)
 			return (false);
 	}
-	else if (tree->data.b.left->type == REDIROUT)
+	else if (tree->data.b.left->type == HEREDOC)
+	{
+		if (ctx->pipe[STDIN_FILENO] > 2)
+			close(ctx->pipe[STDIN_FILENO]);
+		ctx->pipe[STDIN_FILENO] = heredoc(tree->data.b.left, ctx);
+		if (ctx->pipe[STDIN_FILENO] == -1)
+		{
+			ft_putstr_fd("Problem occured with here_doc\n", STDERR_FILENO);
+			return (false);
+		}
+	}
+	return (true);
+}
+
+bool	redir_out(t_node *tree, t_context *ctx)
+{
+	if (tree->data.b.left->type == REDIROUT)
 	{
 		if (ctx->pipe[STDOUT_FILENO] > 2)
 			close(ctx->pipe[STDOUT_FILENO]);
@@ -35,8 +69,6 @@ bool	update_redir(t_node *tree, t_context *ctx)
 		if (open_file_out(ctx, tree->data.b.left, 1) == false)
 			return (false);
 	}
-	if (tree->data.b.right != NULL)
-		update_redir(tree->data.b.right, ctx);
 	return (true);
 }
 
@@ -61,7 +93,7 @@ bool	open_file_in(t_context *ctx, t_node *tree)
 	return (true);
 }
 
-bool	open_file_out(t_context *ctx, t_node *tree, int flag)
+bool	open_file_out(t_context *ctx, t_node *tree, bool flag)
 {
 	if (ctx->pipe[1] > 2)
 		close(ctx->pipe[1]);

@@ -6,24 +6,13 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 14:01:41 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/04 13:15:28 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/04 20:37:08 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**g_minishell_env;
-
-int  ast_cmd_number(t_node *tree, int x)
-{
-	if (!tree)
-		return (0);
-	if (tree->type == CMD)
-		return (1);
-	x += ast_cmd_number(tree->data.b.left, 0);
-	x += ast_cmd_number(tree->data.b.right, 0);
-	return (x);
-}
+int	g_minishell_exit;
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -32,13 +21,19 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	g_minishell_env = envp;
+//	(void)envp;
 	line = NULL;
 	tree = NULL;
+	g_minishell_exit = 0;
+	if (isatty(STDIN_FILENO) == 0)
+	{
+		perror("PopCornShell ");
+		return (1);
+	}
 	init_signal();
 	while (1)
 	{
-		line = readline("🍿PopCornshell >> ");
+		line = readline("🍿PopCornShell>> ");
 		if (line == NULL)
 		{
 			write(1, "exit\n", 5);
@@ -47,9 +42,9 @@ int	main(int argc, char **argv, char **envp)
 		else if (*line && line[0])
 			add_history(line);
 		tree = parsing(line);
-		tree_print(tree);
-		printf("Nombre de Cmd[%d]\n", ast_cmd_number(tree, 0));
+//		tree_print(tree);
 		exec(tree, envp);
+//		printf("Exit code : %d\n", g_minishell_exit);
 		clean_tree(&tree);
 		free(line);
 	}
