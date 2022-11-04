@@ -6,7 +6,7 @@
 #    By: fbily <fbily@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/19 14:13:03 by sbeylot           #+#    #+#              #
-#    Updated: 2022/11/04 10:34:29 by sbeylot          ###   ########.fr        #
+#    Updated: 2022/11/04 10:57:16 by sbeylot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ SRCS_NAME	=	main_flo.c\
 				token_debug.c\
 				token_utils.c\
 				token_iterator.c\
+				token_error.c\
 				env_path.c\
 				word_expansion.c\
 				word_expansion_utils.c\

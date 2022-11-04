@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 11:10:31 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/10/26 15:22:42 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/04 12:42:37 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ t_token	*token_word(char **itr)
 	token->location = (t_slice){.start = *itr, .len = 0, .qnbr = 0, .elem = 0};
 	while (has_next(*itr) && !is_whitespace(peek(*itr)))
 	{
+		if (itr_is_redirection(*itr))
+			return (token);
 		token->location.len += add_word_len(itr);
 		token->location.elem += 1;
 		if (itr_is_quote(*itr) && !is_closed(*itr, peek(*itr)))

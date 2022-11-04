@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 11:03:15 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/10/28 11:53:26 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/04 11:17:59 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,11 @@ t_token	*token_symbol(char **itr)
 	else if (is_symbol(*itr) == REDIRIN || is_symbol(*itr) == REDIROUT)
 		token = token_redir(itr);
 	else if (is_symbol(*itr) == PIPE)
+	{
 		token = token_single_symbol(itr);
+		if (!has_next(*itr))
+			return (syntax_error_pipe(), NULL);
+	}
 	if (!token)
 		return (NULL);
 	return (token);
@@ -82,14 +86,15 @@ void	tokenizer(char *line, t_token **tokens)
 	char	*itr;
 
 	itr = line;
+	if (is_symbol(itr) == PIPE)
+	{
+		syntax_error_pipe();
+		return ;
+	}
 	while (has_next(itr))
 	{
 		if (is_whitespace(peek(itr)))
 			next(&itr);
-		/*
-		else if (is_ignored(peek(itr)))
-			next(&itr);
-			*/
 		else if (is_symbol(itr))
 		{
 			if (!add_token(tokens, token_symbol(&itr)))

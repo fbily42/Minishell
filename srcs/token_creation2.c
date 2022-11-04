@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 11:13:53 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/10/25 15:48:40 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/04 11:22:28 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
  *
  */
 
+//Error [ < ] [ > ] [ << ] [ >> ] 
+
 t_token	*token_redir_fd(char **itr)
 {
 	t_token	*token;
@@ -40,6 +42,8 @@ t_token	*token_redir_fd(char **itr)
 		return (free(token), NULL);
 	while (has_next(*itr) && is_whitespace(peek(*itr)))
 		next(itr);
+	if (!has_next(*itr))
+		return (syntax_error_newline(), NULL);
 	if (itr_is_quote(*itr))
 		token->next->next = token_quoted(itr);
 	else
@@ -65,6 +69,8 @@ t_token	*token_redir2_fd(char **itr)
 		return (free(token), NULL);
 	while (has_next(*itr) && is_whitespace(peek(*itr)))
 		next(itr);
+	if (!has_next(*itr))
+		return (syntax_error_newline(), NULL);
 	if (itr_is_quote(*itr))
 		token->next->next = token_quoted(itr);
 	else
@@ -88,8 +94,12 @@ t_token	*token_redir(char **itr)
 			return (NULL);
 		while (has_next(*itr) && is_whitespace(peek(*itr)))
 			next(itr);
-		if (!has_next(*itr) || itr_is_redirection(*itr))
-			return (free(token), NULL);
+		if (!has_next(*itr))
+			return (syntax_error_newline(), NULL);
+		if (is_symbol(*itr) == PIPE)
+			return (syntax_error_pipe(), free(token), NULL);
+		if (itr_is_redirection(*itr))
+			return (syntax_error_redir_token(token), free(token), NULL);
 		if (itr_is_quote(*itr))
 			token->next = token_quoted(itr);
 		else
@@ -116,8 +126,12 @@ t_token	*token_redir2(char **itr)
 			return (NULL);
 		while (has_next(*itr) && is_whitespace(peek(*itr)))
 			next(itr);
-		if (!has_next(*itr) || itr_is_redirection(*itr))
-			return (free(token), NULL);
+		if (!has_next(*itr))
+			return (syntax_error_newline(), NULL);
+		if (is_symbol(*itr) == PIPE)
+			return (syntax_error_pipe(), free(token), NULL);
+		if (itr_is_redirection(*itr))
+			return (syntax_error_redir_token(token), free(token), NULL);
 		if (itr_is_quote(*itr))
 			token->next = token_quoted(itr);
 		else

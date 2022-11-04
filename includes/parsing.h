@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 08:43:36 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/04 10:33:26 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/04 12:18:35 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ char	**copy_env(char **envp);
 
 /* --- word_expansion.c --- */
 char	*extract_word(t_token **token);
-int		we_create_word(char **tab, char **envp);
+int		we_create_word(char **tab);
 char	*we_reconstruct_word(char **tab, int index);
 char	*word_expansion(char **str);
 
@@ -210,6 +210,9 @@ void	init_signal(void);
 
 /* --- error.c --- */
 int	print_error_syntax(void);
+int	syntax_error_newline(void);
+int	syntax_error_redir_token(t_token *token);
+int	syntax_error_pipe(void);
 
 /* --- buildin_pwd.c --- */
 void	buildin_pwd(void);

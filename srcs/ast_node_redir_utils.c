@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/20 07:43:20 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/04 10:32:25 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/04 12:56:24 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,7 @@ void	assign_redir(t_node **node, t_token **token)
 	else if ((*node)->type == REDIROUT)
 		(*node)->data.r.file = extract_word(token);
 	else if ((*node)->type == APPEND)
+		(*node)->data.r.file = extract_word(token);
+	else if ((*node)->type == HEREDOC)
 		(*node)->data.r.file = extract_word(token);
 }

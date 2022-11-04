@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 10:01:49 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/10/26 09:47:32 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/04 12:45:54 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,6 @@
  * ||	Reconstruct a string from a tab
  */
 
-
-
-extern char	**g_minishell_env;
-
 char	*extract_word(t_token **token)
 {
 	char	**tab;
@@ -76,7 +72,7 @@ char	*extract_word(t_token **token)
 	return (str);
 }
 
-int	we_create_word(char **tab, char **envp)
+int	we_create_word(char **tab)
 {
 	char	*copy;
 	int		tab_len;
@@ -86,19 +82,19 @@ int	we_create_word(char **tab, char **envp)
 	tab_len = tab_length(tab);
 	while (tab[++i])
 	{
-		if (tab[i][0] == '$')
+		if (tab[i][0] == '$' && tab[i][1] != '\0')
 		{
-			copy = ft_strjoin(tab[i] + 1, "=");
-			if (!copy)
-				return (clean_tab(tab, tab_len), 0);
-			free(tab[i]);
-			if (var_exist(copy, envp))
-				tab[i] = get_path_env(envp, copy);
+			if (ft_isdigit(tab[i][1]))
+				copy = getenv(tab[i] + 2);
 			else
+				copy = getenv(tab[i] + 1);
+			free(tab[i]);
+			if (copy == NULL)
 				tab[i] = ft_strdup("");
+			else
+				tab[i] = ft_strdup(copy);
 			if (!tab[i])
 				return (clean_tab(tab, tab_len), free(copy), 0);
-			free(copy);
 		}
 	}
 	return (1);
@@ -136,7 +132,7 @@ char	*word_expansion(char **str)
 	tab = ft_split_dollar(*str);
 	if (!tab)
 		return (free(*str), NULL);
-	if (!we_create_word(tab, g_minishell_env))
+	if (!we_create_word(tab))
 		return (free(*str), NULL);
 	result = we_reconstruct_word(tab, 0);
 	if (!result)
