@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 11:17:38 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/04 12:23:29 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/06 19:23:49 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ static int	ft_word_count(char const *s)
 			count++;
 			s++;
 			while ((ft_isalnum(*s) || *s == '_') && *s)
-			//while (*s != ' ' && *s)
 			{
 				s++;
 				if (*s == '$')
@@ -51,7 +50,6 @@ static int	ft_word_len(char const *s)
 		s++;
 		wordlen++;
 		while ((ft_isalnum(*s) || *s == '_') && *s)
-		//while (*s != ' ' && *s)
 		{
 			wordlen++;
 			s++;

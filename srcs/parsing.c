@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 15:22:45 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/04 11:24:26 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/06 21:46:42 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ t_node	*parsing(char *line)
 	tokenizer(line, &token);
 	if (!token)
 		return (NULL);
-	//token_print(token);
 	tree = parse_pipe(&token);
 	if (!tree)
 		return (free_token(&token), NULL);
@@ -45,6 +44,28 @@ t_node	*parse_pipe(t_token **token)
 	return (node);
 }
 
+int	parse_do_cmd(t_token **token, t_node **node)
+{
+	if ((*node)->data.b.left != NULL)
+		update_cmd(token, (*node)->data.b.left);
+	else
+		(*node)->data.b.left = node_arg(token);
+	if (!(*node)->data.b.left)
+		return (0);
+	return (1);
+}
+
+int	parse_do_redir(t_token **token, t_node **node)
+{
+	if ((*node)->data.b.right != NULL)
+		get_last_redir(*node)->data.b.right = node_arg(token);
+	else
+		(*node)->data.b.right = node_arg(token);
+	if (!(*node)->data.b.right)
+		return (0);
+	return (1);
+}
+
 t_node	*parse_cmd(t_token **token)
 {
 	t_node	*node;
@@ -59,20 +80,12 @@ t_node	*parse_cmd(t_token **token)
 	{
 		if (is_cmd_token(*token))
 		{
-			if (node->data.b.left != NULL)
-				update_cmd(token, node->data.b.left);
-			else
-				node->data.b.left = node_arg(token);
-			if (!node->data.b.left)
+			if (!parse_do_cmd(token, &node))
 				return (clean_tree(&node), NULL);
 		}
 		else if (is_redirection_token(*token))
 		{
-			if (node->data.b.right != NULL)
-				get_last_redir(node)->data.b.right = node_arg(token);
-			else
-				node->data.b.right = node_arg(token);
-			if (!node->data.b.right)
+			if (!parse_do_redir(token, &node))
 				return (clean_tree(&node), NULL);
 		}
 	}

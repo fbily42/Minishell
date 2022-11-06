@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 12:13:38 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/04 12:37:11 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/06 19:17:15 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	add_quoted_len(char **itr, t_type type)
 
 	i = 1;
 	next(itr);
-	while (is_symbol(*itr) != (int)type) //&& peek(*itr - 1) != '\\')
+	while (is_symbol(*itr) != (int)type)
 	{
 		i++;
 		next(itr);
@@ -51,7 +51,7 @@ int	add_word_len(char **itr)
 	{
 		if (itr_is_redirection(*itr))
 			break ;
-		if (itr_is_quote(*itr))// && peek(*itr - 1) != '\\')
+		if (itr_is_quote(*itr))
 			break ;
 		i++;
 		next(itr);

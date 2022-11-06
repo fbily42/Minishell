@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/20 07:43:20 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/04 12:56:24 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/06 18:54:55 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,19 @@
 
 t_node	*init_redir(t_token **token)
 {
-   t_node	*node;
+	t_node	*node;
 
-   node = (t_node *)malloc(sizeof(t_node));
-   if (!node)
-	   return (NULL);
-   init_node_redir(&node);
-   if (get_ttype(token) == IONUMBER)
-	   assign_ionumber(&node, token);
-   if (valid_redir(*token))
-	   assign_redir(&node, token);
-   else
-	   return (free(node), NULL);
-   return (node);
+	node = (t_node *)malloc(sizeof(t_node));
+	if (!node)
+		return (NULL);
+	init_node_redir(&node);
+	if (get_ttype(token) == IONUMBER)
+		assign_ionumber(&node, token);
+	if (valid_redir(*token))
+		assign_redir(&node, token);
+	else
+		return (free(node), NULL);
+	return (node);
 }
 
 void	init_node_redir(t_node **node)
