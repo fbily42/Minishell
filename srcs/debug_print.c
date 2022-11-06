@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug_print.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 09:11:36 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/02 10:07:29 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/06 18:20:44 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,6 @@ void	new_print_tree_recur(t_node *tree, int level)
 	printf("--[%s]\n", debug_node_type(tree->type));
 	new_print_tree_recur(tree->data.b.left, level + 1);
 }
-
-
 
 void	tree_print(t_node *tree)
 {

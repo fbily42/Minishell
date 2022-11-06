@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 20:37:52 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/04 21:01:25 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/06 19:58:02 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 //	Commencer a coder built-in + trouver conditions fork() > Uniquement si pipe
 //	exit_code : 126 == if (cmd ok but x_ok == -1)
 //				ne marche pas avec signaux.
+// info.pids a free dans les childs ??
+// Check valgrind --track-fds=yes pour command not found
 
 extern int	g_minishell_exit;
 
@@ -84,7 +86,7 @@ int	exec_pipe(t_node *tree, t_context *ctx, int *p_int)
 
 int	exec_cmd(t_node *tree, t_context *ctx, int *p_int)
 {
-	if (is_built_in(tree, ctx) == true)
+	if (ctx->nb_cmd == 1 && is_built_in(tree, ctx) == true)
 		return (0);
 	*p_int = fork();
 	if (*p_int == -1)
@@ -93,18 +95,7 @@ int	exec_cmd(t_node *tree, t_context *ctx, int *p_int)
 		return (0);
 	}
 	if (*p_int == 0)
-	{
-		signal(SIGQUIT, SIG_DFL);
-		dup2(ctx->pipe[STDIN_FILENO], STDIN_FILENO);
-		if (ctx->pipe[STDIN_FILENO] > 2)
-			close(ctx->pipe[STDIN_FILENO]);
-		dup2(ctx->pipe[STDOUT_FILENO], STDOUT_FILENO);
-		if (ctx->pipe[STDOUT_FILENO] > 2)
-			close(ctx->pipe[STDOUT_FILENO]);
-		if (ctx->fd_to_close >= 0)
-			close(ctx->fd_to_close);
-		execute_cmd(tree, ctx);
-	}
+		child(tree, ctx);
 	if (ctx->pipe[STDIN_FILENO] > 2)
 		close(ctx->pipe[STDIN_FILENO]);
 	if (ctx->pipe[STDOUT_FILENO] > 2)
@@ -112,17 +103,22 @@ int	exec_cmd(t_node *tree, t_context *ctx, int *p_int)
 	return (1);
 }
 
-bool	is_built_in(t_node *tree, t_context *ctx)
+void	child(t_node *tree, t_context *ctx)
 {
-	if (ft_strcmp(tree->data.c.value[0], "echo") == 0)
+	signal(SIGQUIT, SIG_DFL);
+	dup2(ctx->pipe[STDIN_FILENO], STDIN_FILENO);
+	if (ctx->pipe[STDIN_FILENO] > 2)
+		close(ctx->pipe[STDIN_FILENO]);
+	dup2(ctx->pipe[STDOUT_FILENO], STDOUT_FILENO);
+	if (ctx->pipe[STDOUT_FILENO] > 2)
+		close(ctx->pipe[STDOUT_FILENO]);
+	if (ctx->fd_to_close >= 0)
+		close(ctx->fd_to_close);
+	if (is_built_in(tree, ctx) == true)
 	{
-		echo(tree->data.c.value, ctx->pipe[STDOUT_FILENO]);
-		return (true);
+		clean_struct(ctx);
+		exit(0);
 	}
-	else if (ft_strcmp(tree->data.c.value[0], "pwd") == 0)
-	{
-		pwd(ctx->pipe[STDOUT_FILENO]);
-		return (true);
-	}
-	return (false);
+	else
+		execute_cmd(tree, ctx);
 }

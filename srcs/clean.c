@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 09:10:19 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/02 10:53:58 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/06 18:20:36 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ void	clean_tree(t_node **tree)
 		clean_cmd_node(tree);
 		return ;
 	}
-	if ((*tree)->type == APPEND || (*tree)->type == REDIRIN || (*tree)->type == REDIROUT || (*tree)->type == HEREDOC)
+	if ((*tree)->type == APPEND || (*tree)->type == REDIRIN
+		|| (*tree)->type == REDIROUT || (*tree)->type == HEREDOC)
 	{
 		free((*tree)->data.r.file);
 		free(*tree);
