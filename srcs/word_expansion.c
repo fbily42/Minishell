@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 10:01:49 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/04 12:45:54 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/07 14:33:19 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,41 @@
  * ||	Reconstruct a string from a tab
  */
 
-char	*extract_word(t_token **token)
+extern int	g_minishell_exit;
+
+// Delimiter	--> << HOME		|| Deli = HOME			|| gere avec l'option
+// 				--> << HO$ME	|| deli = HO$ME			|| ""
+// 				--> << $HOME	|| deli = $HOME			|| ""
+// 				--> << $"HOME"	||	deli = HOME			|| 
+// 				--> << $"HOME"$"HOME"	||	deli = HOMEHOME
+// 				-->	<< $HOME"$HOME"		|| deli = $HOME$HOME
+
+char	*extract_delimiter(t_token **token)
+{
+	char	**tab;
+	char	*str;
+	int		i;
+
+	i = -1;
+	tab = (char **)malloc(sizeof(char *) * ((*token)->location.elem + 1));
+	if (!tab)
+		return (NULL);
+	while (++i < (*token)->location.elem)
+	{
+		if (peek(get_tstr(token)) == '$' && peek((*token)->location.start + 1) == '\"')
+			ew_get_dquote(token, &tab[i], 0);	
+		else if (!itr_is_quote(get_tstr(token)))
+			ew_get_word(token, &tab[i], 0);
+	}
+	tab[i] = NULL;
+	str = we_reconstruct_word(tab, 0);
+	if (!str)
+		return (NULL);
+	eat_token(token);
+	return (str);
+}
+
+char	*extract_word(t_token **token, int option)
 {
 	char	**tab;
 	char	*str;
@@ -56,9 +90,9 @@ char	*extract_word(t_token **token)
 	while (++i < (*token)->location.elem)
 	{
 		if (!itr_is_quote(get_tstr(token)))
-			ew_get_word(token, &tab[i]);
+			ew_get_word(token, &tab[i], option);
 		else if (peek(get_tstr(token)) == '\"')
-			ew_get_dquote(token, &tab[i]);
+			ew_get_dquote(token, &tab[i], option);
 		else
 			ew_get_squote(token, &tab[i]);
 		if (!tab[i])
@@ -82,20 +116,22 @@ int	we_create_word(char **tab)
 	tab_len = tab_length(tab);
 	while (tab[++i])
 	{
-		if (tab[i][0] == '$' && tab[i][1] != '\0')
+		if (tab[i][0] == '$' && tab[i][1] == '?')
 		{
-			if (ft_isdigit(tab[i][1]))
-				copy = getenv(tab[i] + 2);
-			else
-				copy = getenv(tab[i] + 1);
+			free(tab[i]);
+			tab[i] = ft_itoa(g_minishell_exit);  
+		}
+		else if (tab[i][0] == '$' && tab[i][1] != '\0')
+		{
+			copy = getenv(tab[i] + 1);
 			free(tab[i]);
 			if (copy == NULL)
 				tab[i] = ft_strdup("");
 			else
 				tab[i] = ft_strdup(copy);
-			if (!tab[i])
-				return (clean_tab(tab, tab_len), free(copy), 0);
 		}
+		if (!tab[i])
+			return (clean_tab(tab, tab_len), free(copy), 0);
 	}
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/26 13:42:23 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/06 19:30:57 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/07 10:37:04 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,19 @@ void	handle_sigint(int signum, siginfo_t *info, void *i)
 	}
 }
 
+void	handler_quit_child(int signum, siginfo_t *info, void *i)
+{
+	(void)i;
+	if (signum == SIGQUIT)
+	{
+		if (info->si_pid == 0)
+		{
+			ft_putstr_fd("Quit (core dumped)\n", 2);
+			g_minishell_exit = 131;
+		}
+	}
+}
+
 void	init_signal(void)
 {
 	struct sigaction	sa_int;
@@ -45,5 +58,15 @@ void	init_signal(void)
 	sa_quit = (struct sigaction){0};
 	sa_quit.sa_handler = SIG_IGN;
 	sigaction(SIGINT, &sa_int, NULL);
+	sigaction(SIGQUIT, &sa_quit, NULL);
+}
+
+void	init_signal_child(void)
+{
+	struct sigaction	sa_quit;
+
+	sa_quit.sa_sigaction = &handler_quit_child;
+	sa_quit.sa_flags = SA_SIGINFO;
+	sa_quit = (struct sigaction){0};
 	sigaction(SIGQUIT, &sa_quit, NULL);
 }

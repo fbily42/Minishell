@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 12:13:38 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/06 19:17:15 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/07 14:40:42 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,10 @@ int	add_quoted_len(char **itr, t_type type)
 	int	i;
 
 	i = 1;
+	/*
+	if (peek(*itr) == '$')
+		next(itr);
+	*/
 	next(itr);
 	while (is_symbol(*itr) != (int)type)
 	{

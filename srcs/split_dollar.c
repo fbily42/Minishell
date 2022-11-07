@@ -6,11 +6,37 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 11:17:38 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/06 19:23:49 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/07 11:39:50 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	ft_count_for_dollar(char const *s, int *count)
+{
+	int	i;
+
+	i = 0;
+	if (s[i] == '$')
+	{
+		*count += 1;
+		i++;
+		if (s[i] >= '1' && s[i] <= '9')
+			i++;
+		else if (s[i] == '?')
+			i++;
+		else
+		{
+			while ((ft_isalnum(s[i]) || s[i] == '_') && s[i])
+			{
+				i++;
+				if (s[i] == '$')
+					break ;
+			}
+		}
+	}
+	return (i);
+}
 
 static int	ft_word_count(char const *s)
 {
@@ -20,16 +46,7 @@ static int	ft_word_count(char const *s)
 	while (*s)
 	{
 		if (*s == '$')
-		{
-			count++;
-			s++;
-			while ((ft_isalnum(*s) || *s == '_') && *s)
-			{
-				s++;
-				if (*s == '$')
-					break ;
-			}
-		}
+			s += ft_count_for_dollar(s, &count);
 		else if (*s != '\0')
 		{
 			count++;
@@ -42,21 +59,13 @@ static int	ft_word_count(char const *s)
 
 static int	ft_word_len(char const *s)
 {
+	int	i;
 	int	wordlen;
 
+	i = 0;
 	wordlen = 0;
 	if (*s == '$')
-	{
-		s++;
-		wordlen++;
-		while ((ft_isalnum(*s) || *s == '_') && *s)
-		{
-			wordlen++;
-			s++;
-			if (*s == '$')
-				break ;
-		}
-	}
+		wordlen += ft_count_for_dollar(s, &i);
 	else
 	{
 		while (*s && *s != '$')

@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 08:43:36 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/06 19:23:32 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/07 15:49:17 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ char	**get_path(char **envp);
 char	**copy_env(char **envp);
 
 /* --- word_expansion.c --- */
-char	*extract_word(t_token **token);
+char	*extract_word(t_token **token, int option);
 int		we_create_word(char **tab);
 char	*we_reconstruct_word(char **tab, int index);
 char	*word_expansion(char **str);
@@ -141,8 +141,8 @@ int		var_exist(char *str, char **envp);
 int		word_expansion_len(char **tab);
 
 /* --- word_expansion_utils2.c --- */
-char	*ew_get_word(t_token **token, char **str);
-char	*ew_get_dquote(t_token **token, char **str);
+char	*ew_get_word(t_token **token, char **str, int option);
+char	*ew_get_dquote(t_token **token, char **str, int option);
 char	*ew_get_squote(t_token **token, char **str);
 
 /* --- split_dollar.c --- */
@@ -214,5 +214,7 @@ int	error_token(t_token **token, char **itr);
 
 /* --- buildin_pwd.c --- */
 void	buildin_pwd(void);
+char	*extract_delimiter(t_token **token);
+t_token *token_delim(char **itr);
 
 #endif

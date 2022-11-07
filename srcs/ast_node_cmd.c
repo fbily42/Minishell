@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:24:06 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/06 18:47:02 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/07 11:30:43 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ char	**init_cmd(t_token **token)
 		return (NULL);
 	while (*token && is_cmd_token(*token))
 	{
-		tab[i++] = extract_word(token);
+		tab[i++] = extract_word(token, 1);
 		if (!tab[i - 1])
 			return (clean_tab(tab, i - 1), NULL);
 	}
