@@ -6,7 +6,7 @@
 #    By: fbily <fbily@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/19 14:13:03 by sbeylot           #+#    #+#              #
-#    Updated: 2022/11/06 20:18:07 by fbily            ###   ########.fr        #
+#    Updated: 2022/11/07 20:51:14 by fbily            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,8 @@ SRCS_NAME	=	main_flo.c\
 				exec_cmd_utils.c\
 				here_doc.c\
 				built_in.c\
-				built_in_2.c
+				built_in_2.c\
+				built_in_utils.c
 
 SRCS_DIR	=	srcs/
 SRCS		=	$(addprefix $(SRCS_DIR), $(SRCS_NAME))

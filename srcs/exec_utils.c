@@ -6,13 +6,13 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 09:52:35 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/06 19:03:12 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/07 19:57:38 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	init_exec(t_node *tree, t_context *ctx, t_info *info, char **envp)
+bool	init_exec(t_node *tree, t_context *ctx, t_info *info)
 {
 	info->i = 0;
 	info->child_count = 0;
@@ -24,7 +24,7 @@ bool	init_exec(t_node *tree, t_context *ctx, t_info *info, char **envp)
 		return (false);
 	}
 	info->p_int = info->pids;
-	if (init_ctx(ctx, envp) == false)
+	if (init_ctx(ctx) == false)
 	{
 		ft_putstr_fd("Problem with paths init\n", STDERR_FILENO);
 		free(info->pids);
@@ -33,16 +33,14 @@ bool	init_exec(t_node *tree, t_context *ctx, t_info *info, char **envp)
 	return (true);
 }
 
-bool	init_ctx(t_context *ctx, char **envp)
+bool	init_ctx(t_context *ctx)
 {
-	ctx->envp = envp;
 	ctx->error = NULL;
 	ctx->cmd = NULL;
 	ctx->my_paths = NULL;
 	ctx->pipe[0] = STDIN_FILENO;
 	ctx->pipe[1] = STDOUT_FILENO;
-	ctx->fd_to_close = -1;
-	if (*envp)
+	if (*ctx->envp)
 		if (find_paths(ctx) == false)
 			return (false);
 	return (true);
