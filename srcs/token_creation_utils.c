@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 12:13:38 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/07 14:40:42 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/08 11:20:38 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,6 @@ int	add_quoted_len(char **itr, t_type type)
 	int	i;
 
 	i = 1;
-	/*
-	if (peek(*itr) == '$')
-		next(itr);
-	*/
 	next(itr);
 	while (is_symbol(*itr) != (int)type)
 	{
@@ -61,4 +57,17 @@ int	add_word_len(char **itr)
 		next(itr);
 	}
 	return (i);
+}
+
+t_token	*init_token(char **itr, t_type type)
+{
+	t_token	*token;
+
+	token = (t_token *)malloc(sizeof(t_token));
+	if (!token)
+		return (NULL);
+	token->type = type;
+	token->next = NULL;
+	token->location = (t_slice){.start = *itr, .len = 0, .qnbr = 0, .elem = 0};
+	return (token);
 }

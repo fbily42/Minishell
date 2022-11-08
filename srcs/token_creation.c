@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 11:10:31 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/07 15:53:05 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/08 11:19:31 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,16 +58,13 @@ t_token	*token_word(char **itr)
 	return (token);
 }
 
-t_token *token_delim(char **itr)
+t_token	*token_delim(char **itr)
 {
 	t_token	*token;
-	
-	token = (t_token *)malloc(sizeof(t_token));
+
+	token = init_token(itr, WORD);
 	if (!token)
 		return (NULL);
-	token->type = WORD;
-	token->next = NULL;
-	token->location = (t_slice){.start = *itr, .len = 0, .qnbr = 0, .elem = 0};
 	while (has_next(*itr) && !is_whitespace(peek(*itr)))
 	{
 		if (peek(*itr) == '$' && peek(*itr + 1) == '\"')

@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 08:43:36 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/07 15:49:17 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/08 11:31:56 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ t_token	*token_redir2_fd(char **itr);
 /* --- token_creation_utils.c --- */
 int		add_quoted_len(char **itr, t_type type);
 int		add_word_len(char **itr);
+t_token	*init_token(char **itr, t_type type);
 
 /* --- token_debug.c --- */
 void	debug_token_type(int c);
@@ -130,7 +131,7 @@ char	**copy_env(char **envp);
 
 /* --- word_expansion.c --- */
 char	*extract_word(t_token **token, int option);
-int		we_create_word(char **tab);
+int		we_create_word(char **tab, int i);
 char	*we_reconstruct_word(char **tab, int index);
 char	*word_expansion(char **str);
 

@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 10:01:49 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/08 11:00:37 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/08 11:32:18 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,9 @@ char	*extract_delimiter(t_token **token)
 		return (NULL);
 	while (++i < (*token)->location.elem)
 	{
-		if (peek(get_tstr(token)) == '$' && peek((*token)->location.start + 1) == '\"')
-			ew_get_dquote(token, &tab[i], 0);	
+		if (peek(get_tstr(token)) == '$' && peek((*token)->location.start + 1) \
+				== '\"')
+			ew_get_dquote(token, &tab[i], 0);
 		else if (!itr_is_quote(get_tstr(token)))
 			ew_get_word(token, &tab[i], 0);
 		else if (itr_is_quote(get_tstr(token)))
@@ -108,20 +109,18 @@ char	*extract_word(t_token **token, int option)
 	return (str);
 }
 
-int	we_create_word(char **tab)
+int	we_create_word(char **tab, int i)
 {
 	char	*copy;
 	int		tab_len;
-	int		i;
 
-	i = -1;
 	tab_len = tab_length(tab);
 	while (tab[++i])
 	{
 		if (tab[i][0] == '$' && tab[i][1] == '?')
 		{
 			free(tab[i]);
-			tab[i] = ft_itoa(g_minishell_exit);  
+			tab[i] = ft_itoa(g_minishell_exit);
 		}
 		else if (tab[i][0] == '$' && tab[i][1] != '\0')
 		{
@@ -170,7 +169,7 @@ char	*word_expansion(char **str)
 	tab = ft_split_dollar(*str);
 	if (!tab)
 		return (free(*str), NULL);
-	if (!we_create_word(tab))
+	if (!we_create_word(tab, -1))
 		return (free(*str), NULL);
 	result = we_reconstruct_word(tab, 0);
 	if (!result)

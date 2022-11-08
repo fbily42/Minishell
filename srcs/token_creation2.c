@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 11:13:53 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/07 15:50:34 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/08 11:29:39 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,11 +118,9 @@ t_token	*token_redir2(char **itr)
 	else
 	{
 		token = token_append_heredoc(itr);
-		if (!token)
-			return (NULL);
 		while (has_next(*itr) && is_whitespace(peek(*itr)))
 			next(itr);
-		if (error_token(&token, itr))
+		if (!token || error_token(&token, itr))
 			return (NULL);
 		if (itr_is_quote(*itr))
 			token->next = token_quoted(itr);
