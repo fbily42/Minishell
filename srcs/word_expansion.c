@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 10:01:49 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/07 14:33:19 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/08 11:00:37 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ char	*extract_delimiter(t_token **token)
 			ew_get_dquote(token, &tab[i], 0);	
 		else if (!itr_is_quote(get_tstr(token)))
 			ew_get_word(token, &tab[i], 0);
+		else if (itr_is_quote(get_tstr(token)))
+			ew_get_squote(token, &tab[i]);
 	}
 	tab[i] = NULL;
 	str = we_reconstruct_word(tab, 0);
