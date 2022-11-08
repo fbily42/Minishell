@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   clean.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 09:10:19 by sbeylot           #+#    #+#             */
 /*   Updated: 2022/11/06 19:24:19 by sbeylot          ###   ########.fr       */

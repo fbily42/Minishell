@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   ast_node_redir_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/20 07:43:20 by sbeylot           #+#    #+#             */
 /*   Updated: 2022/11/07 14:34:23 by sbeylot          ###   ########.fr       */

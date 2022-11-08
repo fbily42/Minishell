@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 20:35:31 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/04 21:15:15 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/06 20:39:15 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define EXEC_H
 
 # include "minishell.h"
-# include "limits.h"
+# include <limits.h>
 
 typedef struct s_context
 {
@@ -40,8 +40,8 @@ typedef struct s_info
 int		exec_cmd(t_node *tree, t_context *ctx, int *p_int);
 int		exec_pipe(t_node *tree, t_context *ctx, int *p_int);
 int		exec_node(t_node *tree, t_context *ctx, int *p_int);
+void	child(t_node *tree, t_context *ctx);
 void	exec(t_node *tree, char **envp);
-bool	is_built_in(t_node *tree, t_context *ctx);
 
 /**************		EXEC_REDIR_UTILS.C		**************/
 bool	open_file_out(t_context *ctx, t_node *tree, bool flag);
@@ -74,7 +74,13 @@ void	clean_struct(t_context *ctx);
 void	free_2d(char **str);
 
 /**************		BUILT_IN.C		**************/
+bool	is_built_in(t_node *tree, t_context *ctx);
+char	**unset(char **envp, char *var);
 void	echo(char **str, int fd);
+void	env(char **envp, int fd);
 void	pwd(int fd);
+
+/**************		BUILT_IN_2.C		**************/
+void	free_until_k(char **str, int k);
 
 #endif
