@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/20 08:05:13 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/02 10:37:09 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/06 19:22:14 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,6 @@ char	*get_tstr(t_token **token)
 size_t	get_tlen(t_token **token)
 {
 	return ((*token)->location.len);
-}
-
-t_node	*get_cmd_node(t_node *node)
-{
-	if (!node)
-		return (NULL);
-	if (node->type == CMD)
-		return (node);
-	return (get_cmd_node(node->data.b.right));
 }
 
 t_node	*get_last_redir(t_node *node)

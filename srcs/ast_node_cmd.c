@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:24:06 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/04 10:31:29 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/07 11:30:43 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ t_node	*node_arg(t_token **token)
 {
 	t_node	*node;
 
+	node = NULL;
 	if (*token && is_redirection_token(*token))
 		node = node_redirection(token);
 	else if (*token && is_cmd_token(*token))
@@ -40,7 +41,6 @@ t_node	*node_pipe(t_node **tree, t_token **token)
 	if (!node)
 		return (clean_tree(tree), NULL);
 	eat_token(token);
-	node->data.b.index = 0;
 	node->type = PIPE;
 	if ((*tree)->type == CMD)
 	{
@@ -93,7 +93,7 @@ char	**init_cmd(t_token **token)
 		return (NULL);
 	while (*token && is_cmd_token(*token))
 	{
-		tab[i++] = extract_word(token);
+		tab[i++] = extract_word(token, 1);
 		if (!tab[i - 1])
 			return (clean_tab(tab, i - 1), NULL);
 	}
