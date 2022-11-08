@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 08:43:36 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/04 12:18:35 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/08 11:31:56 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ typedef struct s_node_redir
 
 typedef struct s_node_branch
 {
-	int			index;
 	t_node		*left;
 	t_node		*right;
 }				t_branch;
@@ -102,6 +101,7 @@ t_token	*token_redir2_fd(char **itr);
 /* --- token_creation_utils.c --- */
 int		add_quoted_len(char **itr, t_type type);
 int		add_word_len(char **itr);
+t_token	*init_token(char **itr, t_type type);
 
 /* --- token_debug.c --- */
 void	debug_token_type(int c);
@@ -130,8 +130,8 @@ char	**get_path(char **envp);
 char	**copy_env(char **envp);
 
 /* --- word_expansion.c --- */
-char	*extract_word(t_token **token);
-int		we_create_word(char **tab);
+char	*extract_word(t_token **token, int option);
+int		we_create_word(char **tab, int i);
 char	*we_reconstruct_word(char **tab, int index);
 char	*word_expansion(char **str);
 
@@ -142,8 +142,8 @@ int		var_exist(char *str, char **envp);
 int		word_expansion_len(char **tab);
 
 /* --- word_expansion_utils2.c --- */
-char	*ew_get_word(t_token **token, char **str);
-char	*ew_get_dquote(t_token **token, char **str);
+char	*ew_get_word(t_token **token, char **str, int option);
+char	*ew_get_dquote(t_token **token, char **str, int option);
 char	*ew_get_squote(t_token **token, char **str);
 
 /* --- split_dollar.c --- */
@@ -176,7 +176,6 @@ void	assign_redir(t_node **node, t_token **token);
 t_type	get_ttype(t_token **token);
 char	*get_tstr(t_token **token);
 size_t	get_tlen(t_token **token);
-t_node	*get_cmd_node(t_node *node);
 t_node	*get_last_redir(t_node *node);
 t_node	*get_last_pipe(t_node *node);
 
@@ -201,7 +200,6 @@ t_node	*parse_cmd(t_token **token);
 void	print_node_cmd(t_node *node);
 void	print_node_redir(t_node *node);
 void	printtab(int ntab);
-void	print_tree_recur(t_node *tree, int level);
 void	tree_print(t_node *tree);
 void	new_print_tree_recur(t_node *tree, int level);
 
@@ -213,8 +211,11 @@ int	print_error_syntax(void);
 int	syntax_error_newline(void);
 int	syntax_error_redir_token(t_token *token);
 int	syntax_error_pipe(void);
+int	error_token(t_token **token, char **itr);
 
 /* --- buildin_pwd.c --- */
 void	buildin_pwd(void);
+char	*extract_delimiter(t_token **token);
+t_token *token_delim(char **itr);
 
 #endif

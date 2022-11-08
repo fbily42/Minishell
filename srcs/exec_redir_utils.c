@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 17:07:59 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/04 19:44:51 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/07 09:09:33 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ bool	update_redir(t_node *tree, t_context *ctx)
 		if (redir_in(tree, ctx) == false)
 			return (false);
 	}
-	else if (tree->data.b.left->type == REDIROUT || APPEND)
+	else if (tree->data.b.left->type == REDIROUT \
+			|| tree->data.b.left->type == APPEND)
 	{
 		if (redir_out(tree, ctx) == false)
 			return (false);

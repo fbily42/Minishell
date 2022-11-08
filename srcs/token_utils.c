@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 11:04:06 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/04 12:40:32 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/06 19:20:58 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	is_closed(char *itr, char quote)
 	next(&temp);
 	while (has_next(temp))
 	{
-		if (peek(temp) == quote)// && peek(temp - 1) != '\\')
+		if (peek(temp) == quote)
 			return (1);
 		next(&temp);
 	}

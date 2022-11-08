@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 09:08:49 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/10/26 11:17:51 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/07 11:31:54 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int	update_cmd(t_token **token, t_node *tree)
 	}
 	while (*token && is_cmd_token(*token))
 	{
-		n_cmd[i++] = extract_word(token);
+		n_cmd[i++] = extract_word(token, 1);
 		if (!n_cmd[i - 1])
 			return (clean_tab(n_cmd, i - 1), 0);
 	}
