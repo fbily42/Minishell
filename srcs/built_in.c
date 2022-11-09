@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 20:24:25 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/07 20:52:27 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/09 22:11:07 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,63 +14,8 @@
 
 /*
 TODO :
-	CD chemin relatif ou absolu
-	EXPORT no option
 	EXIT no option
 */
-
-bool	is_built_in(t_node *tree)
-{
-	if (ft_strcmp(tree->data.c.value[0], "echo") == 0)
-		return (true);
-	else if (ft_strcmp(tree->data.c.value[0], "pwd") == 0)
-		return (true);
-	else if (ft_strcmp(tree->data.c.value[0], "env") == 0)
-		return (true);
-	else if (ft_strcmp(tree->data.c.value[0], "unset") == 0)
-		return (true);
-	else if (ft_strcmp(tree->data.c.value[0], "export") == 0)
-		return (true);
-	return (false);
-}
-
-bool	exec_built_in(t_node *tree, t_context *ctx, bool flag)
-{
-	int	fd;
-
-	if (flag == 0)
-		fd = ctx->pipe[STDOUT_FILENO];
-	else
-		fd = STDOUT_FILENO;
-	if (ft_strcmp(tree->data.c.value[0], "echo") == 0)
-	{
-		echo(tree->data.c.value, fd);
-		return (true);
-	}
-	else if (ft_strcmp(tree->data.c.value[0], "pwd") == 0)
-	{
-		pwd(fd);
-		return (true);
-	}
-	else if (ft_strcmp(tree->data.c.value[0], "env") == 0)
-	{
-		env(ctx->envp, fd);
-		return (true);
-	}
-	else if (ft_strcmp(tree->data.c.value[0], "unset") == 0)
-	{
-		if (tree->data.c.value[1] != NULL && *ctx->envp)
-			ctx->envp = unset(ctx->envp, tree->data.c.value[1]);
-		return (true);
-	}
-	else if (ft_strcmp(tree->data.c.value[0], "unset") == 0)
-	{
-		if (tree->data.c.value[1] != NULL)
-			ctx->envp = export(ctx->envp, tree->data.c.value[1]);
-		return (true);
-	}
-	return (false);
-}
 
 void	echo(char **str, int fd)
 {
@@ -128,4 +73,60 @@ void	env(char **envp, int fd)
 		ft_putstr_fd(envp[i++], fd);
 		write(fd, "\n", 1);
 	}
+}
+
+void	cd(t_context *ctx, char	*path)
+{
+	char	dir[PATH_MAX];
+	char	*oldpwd;
+	char	*pwd;
+
+	ctx->error = ft_strjoin("PopCornShell: ", "cd: ");
+	ctx->error = strjoin_and_free_s1(ctx->error, path);
+	if (getcwd(dir, sizeof(dir)) == NULL)
+		perror("Getcwd ");
+	oldpwd = ft_strjoin("OLDPWD=", dir);
+	if (!oldpwd || !ctx->error)
+	{
+		ft_putstr_fd("Error malloc in cd\n", STDERR_FILENO);
+		return ;
+	}
+	ctx->envp = export(ctx->envp, oldpwd);
+	if (chdir(path) == -1)
+		perror(ctx->error);
+	free(oldpwd);
+	if (getcwd(dir, sizeof(dir)) == NULL)
+		perror("Getcwd ");
+	pwd = ft_strjoin("PWD=", dir);
+	if (!pwd)
+	{
+		ft_putstr_fd("Error malloc in cd\n", STDERR_FILENO);
+		return ;
+	}
+	ctx->envp = export(ctx->envp, pwd);
+	free(ctx->error);
+	ctx->error = NULL;
+}
+
+//On doit free everthing si on exit ?
+// Affiner message d'erreur
+unsigned char	ft_exit(char *code)
+{
+	unsigned int	exit_code;
+
+	if (!code)
+	{
+		ft_putstr_fd("exit\n", STDERR_FILENO);
+		exit(0);
+	}
+	if (code[2] == '-' || code[2] == '+')
+	{
+		ft_putstr_fd("exit\n", STDERR_FILENO);
+		ft_putstr_fd("Numeric argument required\n", STDERR_FILENO);
+		exit(2);
+	}
+	exit_code = ft_atoui(code);
+	ft_putstr_fd("exit\n", STDERR_FILENO);
+	exit((unsigned char)exit_code);
+	return (0);
 }

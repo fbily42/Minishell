@@ -6,18 +6,19 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 20:37:52 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/07 19:56:56 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/09 22:13:06 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 // TODO : 
-//	Commencer a coder built-in + trouver conditions fork() > Uniquement si pipe
+//	Norminette CD
+//	Corriger echo -nnnnnnn
 //	exit_code : 126 == if (cmd ok but x_ok == -1)
 //				ne marche pas avec signaux.
-// info.pids a free dans les childs ??
-// Check valgrind --track-fds=yes pour command not found
+//	info.pids a free dans les childs ??
+//	Check valgrind --track-fds=yes pour command not found
 
 extern int	g_minishell_exit;
 
@@ -35,7 +36,10 @@ void	exec(t_node *tree, t_context *ctx)
 		if (WIFEXITED(info.status))
 			g_minishell_exit = WEXITSTATUS(info.status);
 		else if (WIFSIGNALED(info.status))
-			g_minishell_exit = WTERMSIG(info.status);
+		{
+			if (g_minishell_exit < 130)
+				g_minishell_exit = WTERMSIG(info.status) + 128;
+		}
 	}
 	clean_struct(ctx);
 	free(info.pids);
@@ -82,6 +86,7 @@ int	exec_pipe(t_node *tree, t_context *ctx, int *p_int)
 	return (childs);
 }
 
+//IF EXEC_BUILT_IN == FALSE ??? (>> Error unset or export a gerer)
 int	exec_cmd(t_node *tree, t_context *ctx, int *p_int)
 {
 	if (ctx->nb_cmd == 1 && is_built_in(tree) == true)
