@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 20:37:52 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/09 22:13:06 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/10 15:22:56 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ int	exec_cmd(t_node *tree, t_context *ctx, int *p_int)
 void	child(t_node *tree, t_context *ctx)
 {
 	signal(SIGQUIT, SIG_DFL);
+	init_signal_child();
 	dup2(ctx->pipe[STDIN_FILENO], STDIN_FILENO);
 	if (ctx->pipe[STDIN_FILENO] > 2)
 		close(ctx->pipe[STDIN_FILENO]);

@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 11:03:15 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/10 12:49:01 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/10 15:02:30 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static int	token_var_exist(char *str, char **envp, int len)
 	int	i;
 
 	i = -1;
-	if (!envp)
+	if (!*envp)
 		return (0);
 	if (ft_strncmp(str, "$?", 2) == 0)
 		return (1);
