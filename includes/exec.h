@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 20:35:31 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/09 22:03:29 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/10 10:50:52 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,6 @@
 
 # include "minishell.h"
 # include <limits.h>
-
-typedef struct s_context
-{
-	int		pipe[2];
-	int		nb_cmd;
-	char	**envp;
-	char	**my_paths;
-	char	*error;
-	char	*cmd;
-}				t_context;
 
 typedef struct s_info
 {

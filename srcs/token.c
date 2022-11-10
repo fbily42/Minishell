@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 11:03:15 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/04 11:17:59 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/10 12:49:01 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,35 @@
  * ||	Token list creation
  */
 
-int	add_token(t_token **tokens, t_token *token)
+static int	token_var_exist(char *str, char **envp, int len)
+{
+	int	i;
+
+	i = -1;
+	if (!envp)
+		return (0);
+	if (ft_strncmp(str, "$?", 2) == 0)
+		return (1);
+	len--;
+	str++;
+	while (envp[++i])
+	{
+		if (ft_strncmp(envp[i], str, len) == 0)
+			return (1);
+	}
+	return (0);
+}
+
+int	add_token(t_token **tokens, t_token *token, t_context *ctx)
 {
 	t_token	*cur;
 
 	if (token == NULL)
 		return (0);
+	if (*token->location.start == '$' && \
+			!token_var_exist(token->location.start, ctx->envp, \
+			token->location.len))
+		return (free(token), 1);
 	if (*tokens == NULL)
 		*tokens = token;
 	else
@@ -54,6 +77,21 @@ int	add_token(t_token **tokens, t_token *token)
 		cur->next = token;
 	}
 	return (1);
+}
+
+t_token	*token_dollar(char **itr)
+{
+	t_token	*token;
+
+	token = (t_token *)malloc(sizeof(t_token));
+	if (!token)
+		return (NULL);
+	token->type = DOLLAR;
+	token->next = NULL;
+	token->location = (t_slice){.start = *itr, .len = 0, .qnbr = 0, .elem = 0};
+	token->location.len += add_dollar_len(itr);
+	token->location.elem += 1;
+	return (token);
 }
 
 t_token	*token_symbol(char **itr)
@@ -70,6 +108,8 @@ t_token	*token_symbol(char **itr)
 		token = token_redir2(itr);
 	else if (is_symbol(*itr) == REDIRIN || is_symbol(*itr) == REDIROUT)
 		token = token_redir(itr);
+	else if (is_symbol(*itr) == DOLLAR)
+		token = token_dollar(itr);
 	else if (is_symbol(*itr) == PIPE)
 	{
 		token = token_single_symbol(itr);
@@ -81,7 +121,7 @@ t_token	*token_symbol(char **itr)
 	return (token);
 }
 
-void	tokenizer(char *line, t_token **tokens)
+void	tokenizer(char *line, t_token **tokens, t_context *ctx)
 {
 	char	*itr;
 
@@ -97,12 +137,12 @@ void	tokenizer(char *line, t_token **tokens)
 			next(&itr);
 		else if (is_symbol(itr))
 		{
-			if (!add_token(tokens, token_symbol(&itr)))
+			if (add_token(tokens, token_symbol(&itr), ctx) == 0)
 				return (free_token(tokens));
 		}
 		else
 		{
-			if (!add_token(tokens, token_word(&itr)))
+			if (add_token(tokens, token_word(&itr), ctx) == 0)
 				return (free_token(tokens));
 		}
 	}

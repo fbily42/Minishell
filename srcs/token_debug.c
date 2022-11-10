@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 11:09:13 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/10/25 15:52:56 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/10 12:32:41 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ void	token_print(t_token *token)
 	{
 		write(1, token->location.start, token->location.len);
 		debug_token_type(token->type);
-		printf(" Quote Nbr:%d, Elem Count: %d\n", token->location.qnbr, \
-				token->location.elem);
+		printf(" Quote Nbr:%d, Elem Count: %d, Len: %d\n", token->location.qnbr, \
+				token->location.elem, token->location.len);
 		token = token->next;
 	}
 }

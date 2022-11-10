@@ -6,13 +6,13 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/20 07:43:20 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/07 14:34:23 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/10 13:18:56 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_node	*init_redir(t_token **token)
+t_node	*init_redir(t_token **token, t_context *ctx)
 {
 	t_node	*node;
 
@@ -23,7 +23,7 @@ t_node	*init_redir(t_token **token)
 	if (get_ttype(token) == IONUMBER)
 		assign_ionumber(&node, token);
 	if (valid_redir(*token))
-		assign_redir(&node, token);
+		assign_redir(&node, token, ctx);
 	else
 		return (free(node), NULL);
 	return (node);
@@ -66,7 +66,7 @@ int	valid_redir(t_token *token)
 		return (0);
 }
 
-void	assign_redir(t_node **node, t_token **token)
+void	assign_redir(t_node **node, t_token **token, t_context *ctx)
 {
 	if (!*token)
 		return ;
@@ -80,11 +80,11 @@ void	assign_redir(t_node **node, t_token **token)
 		(*node)->type = APPEND;
 	eat_token(token);
 	if ((*node)->type == REDIRIN)
-		(*node)->data.r.file = extract_word(token, 1);
+		(*node)->data.r.file = extract_word(token, 1, ctx);
 	else if ((*node)->type == REDIROUT)
-		(*node)->data.r.file = extract_word(token, 1);
+		(*node)->data.r.file = extract_word(token, 1, ctx);
 	else if ((*node)->type == APPEND)
-		(*node)->data.r.file = extract_word(token, 1);
+		(*node)->data.r.file = extract_word(token, 1, ctx);
 	else if ((*node)->type == HEREDOC)
-		(*node)->data.r.file = extract_delimiter(token);
+		(*node)->data.r.file = extract_delimiter(token, ctx);
 }

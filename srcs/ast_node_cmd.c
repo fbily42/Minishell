@@ -6,26 +6,26 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:24:06 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/07 11:30:43 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/10 13:18:11 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_node	*node_arg(t_token **token)
+t_node	*node_arg(t_token **token, t_context *ctx)
 {
 	t_node	*node;
 
 	node = NULL;
 	if (*token && is_redirection_token(*token))
-		node = node_redirection(token);
+		node = node_redirection(token, ctx);
 	else if (*token && is_cmd_token(*token))
 	{
 		node = (t_node *)malloc(sizeof(t_node));
 		if (!node)
 			return (NULL);
 		node->data.c.cmd_len = cmd_length(*token);
-		node->data.c.value = init_cmd(token);
+		node->data.c.value = init_cmd(token, ctx);
 		node->type = ARG;
 		if (!node->data.c.value)
 			return (clean_tree(&node), NULL);
@@ -33,7 +33,7 @@ t_node	*node_arg(t_token **token)
 	return (node);
 }
 
-t_node	*node_pipe(t_node **tree, t_token **token)
+t_node	*node_pipe(t_node **tree, t_token **token, t_context *ctx)
 {
 	t_node	*node;
 
@@ -45,7 +45,7 @@ t_node	*node_pipe(t_node **tree, t_token **token)
 	if ((*tree)->type == CMD)
 	{
 		node->data.b.left = *tree;
-		node->data.b.right = parse_cmd(token);
+		node->data.b.right = parse_cmd(token, ctx);
 		if (!node->data.b.right)
 			return (clean_tree(&node), NULL);
 		*tree = node;
@@ -54,7 +54,7 @@ t_node	*node_pipe(t_node **tree, t_token **token)
 	else
 	{
 		node->data.b.left = get_last_pipe(*tree)->data.b.right;
-		node->data.b.right = parse_cmd(token);
+		node->data.b.right = parse_cmd(token, ctx);
 		if (!node->data.b.right)
 			return (clean_tree(tree), free(node), NULL);
 		get_last_pipe(*tree)->data.b.right = node;
@@ -62,7 +62,7 @@ t_node	*node_pipe(t_node **tree, t_token **token)
 	}
 }
 
-t_node	*node_redirection(t_token **token)
+t_node	*node_redirection(t_token **token, t_context *ctx)
 {
 	t_node	*node;
 
@@ -70,10 +70,10 @@ t_node	*node_redirection(t_token **token)
 	if (!node)
 		return (NULL);
 	node->type = REDIR;
-	node->data.b.left = init_redir(token);
+	node->data.b.left = init_redir(token, ctx);
 	if (*token && is_redirection_token(*token))
 	{
-		node->data.b.right = node_arg(token);
+		node->data.b.right = node_arg(token, ctx);
 		if (!node->data.b.right)
 			return (clean_tree(&node), NULL);
 	}
@@ -82,7 +82,7 @@ t_node	*node_redirection(t_token **token)
 	return (node);
 }
 
-char	**init_cmd(t_token **token)
+char	**init_cmd(t_token **token, t_context *ctx)
 {
 	char	**tab;
 	int		i;
@@ -93,7 +93,7 @@ char	**init_cmd(t_token **token)
 		return (NULL);
 	while (*token && is_cmd_token(*token))
 	{
-		tab[i++] = extract_word(token, 1);
+		tab[i++] = extract_word(token, 1, ctx);
 		if (!tab[i - 1])
 			return (clean_tab(tab, i - 1), NULL);
 	}
