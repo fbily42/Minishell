@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 12:13:38 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/08 11:20:38 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/10 12:48:41 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,28 @@ int	add_word_len(char **itr)
 		if (itr_is_redirection(*itr))
 			break ;
 		if (itr_is_quote(*itr))
+			break ;
+		i++;
+		next(itr);
+	}
+	return (i);
+}
+
+int	add_dollar_len(char **itr)
+{
+	int	i;
+
+	i = 1;
+	next(itr);
+	if (itr_is_quote(*itr))
+		return (i + 1);
+	while (has_next(*itr) && !is_whitespace(peek(*itr)))
+	{
+		if (itr_is_redirection(*itr))
+			break ;
+		if (itr_is_quote(*itr))
+			break ;
+		if (peek(*itr) == '$')
 			break ;
 		i++;
 		next(itr);

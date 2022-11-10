@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 09:08:49 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/07 11:31:54 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/10 13:14:57 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ int	is_cmd_token(t_token *token)
 {
 	if (!token)
 		return (0);
-	if (token->type == WORD || token->type == SQUOTE || token->type == DQUOTE)
+	if (token->type == WORD || token->type == SQUOTE || token->type == DQUOTE \
+			|| token->type == DOLLAR)
 		return (1);
 	return (0);
 }
@@ -70,7 +71,7 @@ int	nbr_new_argument(t_token **token)
 	return (i);
 }
 
-int	update_cmd(t_token **token, t_node *tree)
+int	update_cmd(t_token **token, t_node *tree, t_context *ctx)
 {
 	int		i;
 	int		n_l;
@@ -89,7 +90,7 @@ int	update_cmd(t_token **token, t_node *tree)
 	}
 	while (*token && is_cmd_token(*token))
 	{
-		n_cmd[i++] = extract_word(token, 1);
+		n_cmd[i++] = extract_word(token, 1, ctx);
 		if (!n_cmd[i - 1])
 			return (clean_tab(n_cmd, i - 1), 0);
 	}

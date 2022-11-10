@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 10:01:49 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/08 11:32:18 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/10 13:16:14 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,7 @@
 
 extern int	g_minishell_exit;
 
-// Delimiter	--> << HOME		|| Deli = HOME			|| gere avec l'option
-// 				--> << HO$ME	|| deli = HO$ME			|| ""
-// 				--> << $HOME	|| deli = $HOME			|| ""
-// 				--> << $"HOME"	||	deli = HOME			|| 
-// 				--> << $"HOME"$"HOME"	||	deli = HOMEHOME
-// 				-->	<< $HOME"$HOME"		|| deli = $HOME$HOME
-
-char	*extract_delimiter(t_token **token)
+char	*extract_delimiter(t_token **token, t_context *ctx)
 {
 	char	**tab;
 	char	*str;
@@ -66,9 +59,9 @@ char	*extract_delimiter(t_token **token)
 	{
 		if (peek(get_tstr(token)) == '$' && peek((*token)->location.start + 1) \
 				== '\"')
-			ew_get_dquote(token, &tab[i], 0);
+			ew_get_dquote(token, &tab[i], 0, ctx);
 		else if (!itr_is_quote(get_tstr(token)))
-			ew_get_word(token, &tab[i], 0);
+			ew_get_word(token, &tab[i], 0, ctx);
 		else if (itr_is_quote(get_tstr(token)))
 			ew_get_squote(token, &tab[i]);
 	}
@@ -80,7 +73,7 @@ char	*extract_delimiter(t_token **token)
 	return (str);
 }
 
-char	*extract_word(t_token **token, int option)
+char	*extract_word(t_token **token, int option, t_context *ctx)
 {
 	char	**tab;
 	char	*str;
@@ -93,9 +86,9 @@ char	*extract_word(t_token **token, int option)
 	while (++i < (*token)->location.elem)
 	{
 		if (!itr_is_quote(get_tstr(token)))
-			ew_get_word(token, &tab[i], option);
+			ew_get_word(token, &tab[i], option, ctx);
 		else if (peek(get_tstr(token)) == '\"')
-			ew_get_dquote(token, &tab[i], option);
+			ew_get_dquote(token, &tab[i], option, ctx);
 		else
 			ew_get_squote(token, &tab[i]);
 		if (!tab[i])
@@ -109,7 +102,7 @@ char	*extract_word(t_token **token, int option)
 	return (str);
 }
 
-int	we_create_word(char **tab, int i)
+int	we_create_word(char **tab, int i, t_context *ctx)
 {
 	char	*copy;
 	int		tab_len;
@@ -124,15 +117,26 @@ int	we_create_word(char **tab, int i)
 		}
 		else if (tab[i][0] == '$' && tab[i][1] != '\0')
 		{
+			copy = ft_strjoin(tab[i] + 1, "=");
+			if (!copy)
+				return (clean_tab(tab, tab_len), 0);
+			free(tab[i]);
+			if (var_exist(copy, ctx->envp))
+				tab[i] = get_path_env(ctx->envp, copy);
+			else
+				tab[i] = ft_strdup("");
+			/*
 			copy = getenv(tab[i] + 1);
 			free(tab[i]);
 			if (copy == NULL)
 				tab[i] = ft_strdup("");
 			else
 				tab[i] = ft_strdup(copy);
+			*/
 		}
 		if (!tab[i])
 			return (clean_tab(tab, tab_len), free(copy), 0);
+		free(copy);
 	}
 	return (1);
 }
@@ -161,7 +165,7 @@ char	*we_reconstruct_word(char **tab, int index)
 	return (word);
 }
 
-char	*word_expansion(char **str)
+char	*word_expansion(char **str, t_context *ctx)
 {
 	char	**tab;
 	char	*result;
@@ -169,7 +173,7 @@ char	*word_expansion(char **str)
 	tab = ft_split_dollar(*str);
 	if (!tab)
 		return (free(*str), NULL);
-	if (!we_create_word(tab, -1))
+	if (!we_create_word(tab, -1, ctx))
 		return (free(*str), NULL);
 	result = we_reconstruct_word(tab, 0);
 	if (!result)

@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 12:15:26 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/08 11:24:29 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/10 12:56:13 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,21 +30,24 @@
 
  */
 
-char	*ew_get_word(t_token **token, char **str, int option)
+char	*ew_get_word(t_token **token, char **str, int option, t_context *ctx)
 {
 	char	*pstr;
 
 	pstr = (*token)->location.start;
-	*str = ft_strndup(get_tstr(token), add_word_len(&pstr));
+	if ((*token)->type != DOLLAR)
+		*str = ft_strndup(get_tstr(token), add_word_len(&pstr));
+	else
+		*str = ft_strndup(get_tstr(token), add_dollar_len(&pstr));
 	if (!str)
 		return (NULL);
 	add_word_len(&(*token)->location.start);
 	if (dollar_inside(*str) >= 0 && option)
-		*str = word_expansion(str);
+		*str = word_expansion(str, ctx);
 	return (*str);
 }
 
-char	*ew_get_dquote(t_token **token, char **str, int option)
+char	*ew_get_dquote(t_token **token, char **str, int option, t_context *ctx)
 {
 	char	*pstr;
 
@@ -69,7 +72,7 @@ char	*ew_get_dquote(t_token **token, char **str, int option)
 		(*token)->location.elem -= 1;
 	}
 	if (dollar_inside(*str) >= 0 && option)
-		*str = word_expansion(str);
+		*str = word_expansion(str, ctx);
 	return (*str);
 }
 
