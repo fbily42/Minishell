@@ -6,36 +6,11 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 17:06:40 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/03 17:08:44 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/10 20:36:36 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*
-Print message "PopCornShell: ARGV: Commant not found\n"
-*/
-void	print_error_cmd(t_context *ctx, char *argv)
-{
-	ctx->error = ft_strjoin(argv, ": Command not found\n");
-	ctx->error = strjoin_and_free_s2("PopCornShell: ", ctx->error);
-	if (!ctx->error)
-		ft_putstr_fd("Error malloc\n", STDERR_FILENO);
-	ft_putstr_fd(ctx->error, STDERR_FILENO);
-	free(ctx->error);
-	ctx->error = NULL;
-}
-
-bool	error_msg(t_context *ctx, char *argv)
-{
-	ctx->error = ft_strjoin("PopCornShell : ", argv);
-	if (!ctx->error)
-	{
-		ft_putstr_fd("Error malloc\n", STDERR_FILENO);
-		return (false);
-	}
-	return (true);
-}
 
 /*
 Call ft_strjoin and free *s1
@@ -65,4 +40,19 @@ char	*strjoin_and_free_s2(char *s1, char *s2)
 		return (NULL);
 	free(s2);
 	return (back);
+}
+
+void	error_malloc(t_context *ctx)
+{
+	ft_putstr_fd("Error malloc\n", STDERR_FILENO);
+	clean_struct(ctx);
+	clean_tree(&ctx->root);
+	exit(EXIT_FAILURE);
+}
+
+void	exit_and_clean(t_context *ctx, int code)
+{
+	clean_struct(ctx);
+	clean_tree(&ctx->root);
+	exit(code);
 }
