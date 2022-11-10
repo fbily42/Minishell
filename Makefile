@@ -6,7 +6,7 @@
 #    By: fbily <fbily@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/19 14:13:03 by sbeylot           #+#    #+#              #
-#    Updated: 2022/11/09 21:20:05 by fbily            ###   ########.fr        #
+#    Updated: 2022/11/10 15:07:42 by sbeylot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -90,7 +90,7 @@ run: all
 	@./$(NAME)
 
 debug: info compile_libft 
-	@$(CC) $(HEADER_INC) $(HEADER_INC_LIBFT) $(SRCS) -o $(NAME) $(READLINE) $(LIBFT) -g3 -fsanitize=address 
+	@$(CC) $(HEADER_INC) $(HEADER_INC_LIBFT) $(SRCS) -o $(NAME) $(READLINE) $(LIBFT) -g3  
 	@echo "\t\t[ $(GREEN)✓$(NONE) ] $(GREEN)$(NAME)$(NONE) for GDB ready!"
 
 $(OBJS_DIR)%.o: $(SRCS_DIR)%.c $(HEADER)
