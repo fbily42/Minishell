@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   here_doc.c                                         :+:      :+:    :+:   */
+/*   here_doc_and_path.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 20:39:42 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/04 19:34:14 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/10 20:54:02 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,71 @@ int	heredoc(t_node	*node, t_context *ctx)
 		ft_putendl_fd(heredoc, fd[1]);
 		free(heredoc);
 	}
+}
+
+/* 
+Find the line "PATH=" in (char **)envp
+Split every paths between " : "
+Call create_paths
+Return : TRUE if everything is OK
+Return : FALSE if something wrong happened.
+*/
+bool	find_paths(t_context *ctx)
+{
+	char	*path;
+	int		i;
+
+	i = 0;
+	while (ctx->envp[i])
+	{
+		path = ft_strnstr(ctx->envp[i], "PATH=", 5);
+		if (path)
+		{	
+			path = ft_substr(ctx->envp[i], 5, ft_strlen(ctx->envp[i]));
+			if (!path)
+				return (false);
+			break ;
+		}
+		i++;
+	}
+	if (!path)
+		return (true);
+	ctx->my_paths = ft_split(path, ":");
+	free(path);
+	if (!*ctx->my_paths)
+		return (false);
+	if (create_paths(ctx) == false)
+		return (false);
+	return (true);
+}
+
+/* 
+Create every paths and store them in (char **)ctx.my_paths
+Return : TRUE if everything is OK
+Return : FALSE if something wrong happened.
+*/
+bool	create_paths(t_context *ctx)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (ctx->my_paths[j])
+		j++;
+	while (ctx->my_paths && ctx->my_paths[i])
+	{
+		ctx->my_paths[i] = strjoin_and_free_s1(ctx->my_paths[i], "/");
+		if (ctx->my_paths[i] == NULL)
+		{
+			i = 0;
+			while (i < j)
+				free(ctx->my_paths[i++]);
+			free(ctx->my_paths);
+			ctx->my_paths = NULL;
+			return (false);
+		}
+		i++;
+	}
+	return (true);
 }
