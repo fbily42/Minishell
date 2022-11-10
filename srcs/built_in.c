@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 20:24:25 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/06 20:44:18 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/09 22:11:07 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,43 +14,15 @@
 
 /*
 TODO :
-	CD chemin relatif ou absolu
-	EXPORT no option
-	UNSET no option
-	ENV no option / no argument
 	EXIT no option
 */
 
-bool	is_built_in(t_node *tree, t_context *ctx)
-{
-	if (ft_strcmp(tree->data.c.value[0], "echo") == 0)
-	{
-		echo(tree->data.c.value, ctx->pipe[STDOUT_FILENO]);
-		return (true);
-	}
-	else if (ft_strcmp(tree->data.c.value[0], "pwd") == 0)
-	{
-		pwd(ctx->pipe[STDOUT_FILENO]);
-		return (true);
-	}
-	else if (ft_strcmp(tree->data.c.value[0], "env") == 0)
-	{
-		env(ctx->envp, ctx->pipe[STDOUT_FILENO]);
-		return (true);
-	}
-	// else if (ft_strcmp(tree->data.c.value[0], "unset") == 0)
-	// {
-	// 	ctx->envp = unset(ctx->envp, tree->data.c.value[0]);
-	// 	return (true);
-	// }
-	return (false);
-}
-
 void	echo(char **str, int fd)
 {
-	int	i;
-	int	flag;
+	int		i;
+	bool	flag;
 
+	(void)fd;
 	i = 1;
 	flag = 0;
 	if (!*str || !str)
@@ -103,34 +75,58 @@ void	env(char **envp, int fd)
 	}
 }
 
-// fais segfault .. Need ***envp ?
-char	**unset(char **envp, char *var)
+void	cd(t_context *ctx, char	*path)
 {
-	char	**new_env;
-	int		i;
-	int		j;
+	char	dir[PATH_MAX];
+	char	*oldpwd;
+	char	*pwd;
 
-	i = -1;
-	j = 0 ;
-	if (!*envp)
-		return (NULL);
-	new_env = (char **)malloc(sizeof(char *) * (tab_len(envp) + 1));
-	if (!new_env)
-		return (free_2d(envp), NULL);
-	while (envp[++i])
+	ctx->error = ft_strjoin("PopCornShell: ", "cd: ");
+	ctx->error = strjoin_and_free_s1(ctx->error, path);
+	if (getcwd(dir, sizeof(dir)) == NULL)
+		perror("Getcwd ");
+	oldpwd = ft_strjoin("OLDPWD=", dir);
+	if (!oldpwd || !ctx->error)
 	{
-		if (ft_strncmp(envp[i], var, ft_strlen(var)) != 0)
-		{
-			new_env[j] = ft_strdup(envp[i]);
-			if (new_env[j] == NULL)
-			{
-				free_until_k(new_env, j);
-				return (free_2d(envp), NULL);
-			}
-			j++;
-		}
+		ft_putstr_fd("Error malloc in cd\n", STDERR_FILENO);
+		return ;
 	}
-	new_env[j] = NULL;
-	free_2d(envp);
-	return (new_env);
+	ctx->envp = export(ctx->envp, oldpwd);
+	if (chdir(path) == -1)
+		perror(ctx->error);
+	free(oldpwd);
+	if (getcwd(dir, sizeof(dir)) == NULL)
+		perror("Getcwd ");
+	pwd = ft_strjoin("PWD=", dir);
+	if (!pwd)
+	{
+		ft_putstr_fd("Error malloc in cd\n", STDERR_FILENO);
+		return ;
+	}
+	ctx->envp = export(ctx->envp, pwd);
+	free(ctx->error);
+	ctx->error = NULL;
+}
+
+//On doit free everthing si on exit ?
+// Affiner message d'erreur
+unsigned char	ft_exit(char *code)
+{
+	unsigned int	exit_code;
+
+	if (!code)
+	{
+		ft_putstr_fd("exit\n", STDERR_FILENO);
+		exit(0);
+	}
+	if (code[2] == '-' || code[2] == '+')
+	{
+		ft_putstr_fd("exit\n", STDERR_FILENO);
+		ft_putstr_fd("Numeric argument required\n", STDERR_FILENO);
+		exit(2);
+	}
+	exit_code = ft_atoui(code);
+	ft_putstr_fd("exit\n", STDERR_FILENO);
+	exit((unsigned char)exit_code);
+	return (0);
 }

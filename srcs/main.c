@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_flo.c                                         :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 14:01:41 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/06 20:38:16 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/09 22:20:38 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ int	g_minishell_exit;
 
 int	main(int argc, char **argv, char **envp)
 {
-	char	*line;
-	char	**my_env;
-	t_node	*tree;
+	char		*line;
+	t_node		*tree;
+	t_context	ctx;
 
 	(void)argc;
 	(void)argv;
@@ -29,13 +29,9 @@ int	main(int argc, char **argv, char **envp)
 		perror("PopCornShell ");
 		return (1);
 	}
-	my_env = (char **)malloc(sizeof(char *));
-	if (my_env == NULL)
-		return (ft_putstr_fd("Probleme with malloc\n", STDERR_FILENO), -1);
-	my_env[0] = NULL;
 	g_minishell_exit = 0;
 	if (*envp)
-		my_env = copy_env(envp);
+		ctx.envp = copy_env(envp);
 	init_signal();
 	while (1)
 	{
@@ -48,11 +44,10 @@ int	main(int argc, char **argv, char **envp)
 		else if (*line && line[0])
 			add_history(line);
 		tree = parsing(line);
-//		tree_print(tree);
-		exec(tree, my_env);
-//		printf("Exit code : %d\n", g_minishell_exit);
+		exec(tree, &ctx);
 		clean_tree(&tree);
 		free(line);
 	}
+	free_2d(ctx.envp);
 	return (0);
 }

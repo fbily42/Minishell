@@ -5,19 +5,10 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/06 20:09:28 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/06 20:09:45 by fbily            ###   ########.fr       */
+/*   Created: 2022/11/09 21:15:11 by fbily             #+#    #+#             */
+/*   Updated: 2022/11/09 21:18:57 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_until_k(char **str, int k)
-{
-	int	i;
-
-	i = 0;
-	while (i < k)
-		free(str[i++]);
-	free(str);
-}

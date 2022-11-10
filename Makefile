@@ -6,7 +6,7 @@
 #    By: fbily <fbily@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/19 14:13:03 by sbeylot           #+#    #+#              #
-#    Updated: 2022/11/06 20:18:07 by fbily            ###   ########.fr        #
+#    Updated: 2022/11/09 21:20:05 by fbily            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME		=	minishell
 CC			=	cc
 CFLAGS		=	-Wall -Wextra -Werror 
 # SRCS
-SRCS_NAME	=	main_flo.c\
+SRCS_NAME	=	main.c\
 				token.c\
 				token_creation.c\
 				token_creation2.c\
@@ -45,7 +45,10 @@ SRCS_NAME	=	main_flo.c\
 				exec_cmd_utils.c\
 				here_doc.c\
 				built_in.c\
-				built_in_2.c
+				exec_built_in.c\
+				built_in_utils.c\
+				unset.c\
+				export.c
 
 SRCS_DIR	=	srcs/
 SRCS		=	$(addprefix $(SRCS_DIR), $(SRCS_NAME))

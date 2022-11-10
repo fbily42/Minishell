@@ -6,29 +6,29 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 20:37:52 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/06 19:58:02 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/09 22:13:06 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 // TODO : 
-//	Commencer a coder built-in + trouver conditions fork() > Uniquement si pipe
+//	Norminette CD
+//	Corriger echo -nnnnnnn
 //	exit_code : 126 == if (cmd ok but x_ok == -1)
 //				ne marche pas avec signaux.
-// info.pids a free dans les childs ??
-// Check valgrind --track-fds=yes pour command not found
+//	info.pids a free dans les childs ??
+//	Check valgrind --track-fds=yes pour command not found
 
 extern int	g_minishell_exit;
 
-void	exec(t_node *tree, char **envp)
+void	exec(t_node *tree, t_context *ctx)
 {
-	t_context	ctx;
 	t_info		info;
 
-	if (init_exec(tree, &ctx, &info, envp) == false)
+	if (init_exec(tree, ctx, &info) == false)
 		return ;
-	info.child_count = exec_node(tree, &ctx, info.p_int);
+	info.child_count = exec_node(tree, ctx, info.p_int);
 	if (info.child_count != 0)
 	{
 		while (info.i < info.child_count)
@@ -36,9 +36,12 @@ void	exec(t_node *tree, char **envp)
 		if (WIFEXITED(info.status))
 			g_minishell_exit = WEXITSTATUS(info.status);
 		else if (WIFSIGNALED(info.status))
-			g_minishell_exit = WTERMSIG(info.status);
+		{
+			if (g_minishell_exit < 130)
+				g_minishell_exit = WTERMSIG(info.status) + 128;
+		}
 	}
-	clean_struct(&ctx);
+	clean_struct(ctx);
 	free(info.pids);
 }
 
@@ -73,7 +76,6 @@ int	exec_pipe(t_node *tree, t_context *ctx, int *p_int)
 	childs = 0;
 	lhs_ctx = *ctx;
 	lhs_ctx.pipe[STDOUT_FILENO] = p[STDOUT_FILENO];
-	lhs_ctx.fd_to_close = p[STDIN_FILENO];
 	childs += exec_node(tree->data.b.left, &lhs_ctx, p_int);
 	close(p[STDOUT_FILENO]);
 	p_int++;
@@ -84,10 +86,19 @@ int	exec_pipe(t_node *tree, t_context *ctx, int *p_int)
 	return (childs);
 }
 
+//IF EXEC_BUILT_IN == FALSE ??? (>> Error unset or export a gerer)
 int	exec_cmd(t_node *tree, t_context *ctx, int *p_int)
 {
-	if (ctx->nb_cmd == 1 && is_built_in(tree, ctx) == true)
+	if (ctx->nb_cmd == 1 && is_built_in(tree) == true)
+	{
+		exec_built_in(tree, ctx, 0);
+		if (ctx->pipe[STDIN_FILENO] > 2)
+			close(ctx->pipe[STDIN_FILENO]);
+		if (ctx->pipe[STDOUT_FILENO] > 2)
+			close(ctx->pipe[STDOUT_FILENO]);
+		g_minishell_exit = 0;
 		return (0);
+	}
 	*p_int = fork();
 	if (*p_int == -1)
 	{
@@ -112,12 +123,11 @@ void	child(t_node *tree, t_context *ctx)
 	dup2(ctx->pipe[STDOUT_FILENO], STDOUT_FILENO);
 	if (ctx->pipe[STDOUT_FILENO] > 2)
 		close(ctx->pipe[STDOUT_FILENO]);
-	if (ctx->fd_to_close >= 0)
-		close(ctx->fd_to_close);
-	if (is_built_in(tree, ctx) == true)
+	if (is_built_in(tree) == true)
 	{
+		exec_built_in(tree, ctx, 1);
 		clean_struct(ctx);
-		exit(0);
+		exit(EXIT_SUCCESS);
 	}
 	else
 		execute_cmd(tree, ctx);
