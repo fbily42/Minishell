@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 12:13:38 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/10 12:48:41 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/11 11:34:51 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ int	add_dollar_len(char **itr)
 			break ;
 		if (itr_is_quote(*itr))
 			break ;
-		if (peek(*itr) == '$')
-			break ;
+		//if (peek(*itr) == '$')
+		//	break ;
 		i++;
 		next(itr);
 	}
