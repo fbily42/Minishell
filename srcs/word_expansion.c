@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 10:01:49 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/10 15:18:18 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/11 14:41:03 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,23 @@ int	we_create_word(char **tab, int i, t_context *ctx)
 			free(tab[i]);
 			tab[i] = ft_itoa(g_minishell_exit);
 		}
+		else if (tab[i + 1] != NULL && (tab[i][0] == '$' && tab[i][1] == '\0'))
+		{
+			free(tab[i]);
+			tab[i] = ft_strdup("");
+		}
+		/*
+		else if (!var_exist(tab[i], ctx->envp) && (tab[i][0] == '$' && tab[i + 1] == NULL))
+		{
+			free(tab[i]);
+			tab[i] = ft_strdup("");
+		}
+		*/
+		else if (tab[i + 1] != NULL && (tab[i][0] == '$' && (tab[i + 1][0] == '\''  || tab[i + 1][0] == '\"')))
+		{
+			free(tab[i]);
+			tab[i] = ft_strdup("");
+		}
 		else if (tab[i][0] == '$' && tab[i][1] != '\0')
 		{
 			copy = ft_strjoin(tab[i] + 1, "=");
@@ -126,14 +143,6 @@ int	we_create_word(char **tab, int i, t_context *ctx)
 			else
 				tab[i] = ft_strdup("");
 			free(copy);
-			/*
-			copy = getenv(tab[i] + 1);
-			free(tab[i]);
-			if (copy == NULL)
-				tab[i] = ft_strdup("");
-			else
-				tab[i] = ft_strdup(copy);
-			*/
 		}
 		if (!tab[i])
 			return (clean_tab(tab, tab_len), free(copy), 0);
@@ -173,6 +182,15 @@ char	*word_expansion(char **str, t_context *ctx)
 	tab = ft_split_dollar(*str);
 	if (!tab)
 		return (free(*str), NULL);
+	/*
+	if (tab_len(tab) == 1)
+	{
+		result = ft_strdup("");
+		if (!result)
+			return (free(*str), NULL);
+		return (result);
+	}
+	*/
 	if (!we_create_word(tab, -1, ctx))
 		return (free(*str), NULL);
 	result = we_reconstruct_word(tab, 0);

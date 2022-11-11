@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 11:04:06 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/10 11:51:29 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/11 12:32:52 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,6 @@ int	is_symbol(char *c)
 		return (SQUOTE);
 	else if (peek(c) == '\"')
 		return (DQUOTE);
-	else if (peek(c) == '$')
-		return (DOLLAR);
 	return (0);
 }
 
@@ -85,6 +83,7 @@ int	is_closed(char *itr, char quote)
 			return (1);
 		next(&temp);
 	}
+	print_error_token();
 	return (0);
 }
 
