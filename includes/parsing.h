@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 08:43:36 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/10 15:21:09 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/11 12:54:15 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,7 +223,7 @@ void	init_signal(void);
 void	init_signal_child(void);
 
 /* --- error.c --- */
-int	print_error_syntax(void);
+int	print_error_token(void);
 int	syntax_error_newline(void);
 int	syntax_error_redir_token(t_token *token);
 int	syntax_error_pipe(void);

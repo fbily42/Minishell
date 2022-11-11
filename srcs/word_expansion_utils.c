@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 15:45:32 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/10/26 09:50:50 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/11 12:55:52 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ int	var_exist(char	*str, char **envp)
 	i = -1;
 	if (!envp)
 		return (0);
+	if (*str == '$')
+		str++;
 	while (envp[++i])
 	{
 		if (ft_strncmp(envp[i], str, ft_strlen(str)) == 0)
