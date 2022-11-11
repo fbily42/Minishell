@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 20:37:52 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/09 22:13:06 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/10 20:55:06 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	exec(t_node *tree, t_context *ctx)
 	t_info		info;
 
 	if (init_exec(tree, ctx, &info) == false)
-		return ;
+		error_malloc(ctx);
 	info.child_count = exec_node(tree, ctx, info.p_int);
 	if (info.child_count != 0)
 	{
@@ -42,7 +42,6 @@ void	exec(t_node *tree, t_context *ctx)
 		}
 	}
 	clean_struct(ctx);
-	free(info.pids);
 }
 
 int	exec_node(t_node *tree, t_context *ctx, int *p_int)
@@ -117,6 +116,7 @@ int	exec_cmd(t_node *tree, t_context *ctx, int *p_int)
 void	child(t_node *tree, t_context *ctx)
 {
 	signal(SIGQUIT, SIG_DFL);
+	init_signal_child();
 	dup2(ctx->pipe[STDIN_FILENO], STDIN_FILENO);
 	if (ctx->pipe[STDIN_FILENO] > 2)
 		close(ctx->pipe[STDIN_FILENO]);
@@ -127,6 +127,7 @@ void	child(t_node *tree, t_context *ctx)
 	{
 		exec_built_in(tree, ctx, 1);
 		clean_struct(ctx);
+		clean_tree(&ctx->root);
 		exit(EXIT_SUCCESS);
 	}
 	else

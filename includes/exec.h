@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 20:35:31 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/10 10:50:52 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/10 20:53:46 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,21 +39,23 @@ bool			open_file_in(t_context *ctx, t_node *tree);
 bool			redir_out(t_node *tree, t_context *ctx);
 bool			redir_in(t_node *tree, t_context *ctx);
 
-/**************		HERE_DOC.C		**************/
+/**************		HERE_DOC_AND_PATH.C		**************/
 int				heredoc(t_node	*node, t_context *ctx);
-
-/**************		EXEC_CMD_UTILS.C		**************/
-bool			check_path_cmd(t_context *ctx, t_node *tree);
-void			execute_cmd(t_node *tree, t_context *ctx);
-bool			find_cmd(t_node *tree, t_context *ctx);
 bool			create_paths(t_context *ctx);
 bool			find_paths(t_context *ctx);
 
+/**************		EXEC_CMD_UTILS.C		**************/
+bool			check_cmd_with_path(t_node *tree, t_context *ctx);
+void			check_exceptions(char *cmd, t_context *ctx);
+bool			check_dot_slash(char *cmd, t_context *ctx);
+void			execute_cmd(t_node *tree, t_context *ctx);
+bool			find_cmd(t_node *tree, t_context *ctx);
+
 /**************		EXEC_ERROR_UTILS.C		**************/
-void			print_error_cmd(t_context *ctx, char *argv);
 char			*strjoin_and_free_s1(char *s1, char *s2);
 char			*strjoin_and_free_s2(char *s1, char *s2);
-bool			error_msg(t_context *ctx, char *argv);
+void			exit_and_clean(t_context *ctx, int code);
+void			error_malloc(t_context *ctx);
 
 /**************		EXEC_UTILS.C		**************/
 bool			init_exec(t_node *tree, t_context *ctx, t_info *info);

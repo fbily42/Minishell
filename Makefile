@@ -6,7 +6,7 @@
 #    By: fbily <fbily@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/19 14:13:03 by sbeylot           #+#    #+#              #
-#    Updated: 2022/11/09 21:20:05 by fbily            ###   ########.fr        #
+#    Updated: 2022/11/10 20:55:58 by fbily            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,7 @@ SRCS_NAME	=	main.c\
 				exec_redir_utils.c\
 				exec_error_utils.c\
 				exec_cmd_utils.c\
-				here_doc.c\
+				here_doc_and_path.c\
 				built_in.c\
 				exec_built_in.c\
 				built_in_utils.c\
@@ -90,7 +90,7 @@ run: all
 	@./$(NAME)
 
 debug: info compile_libft 
-	@$(CC) $(HEADER_INC) $(HEADER_INC_LIBFT) $(SRCS) -o $(NAME) $(READLINE) $(LIBFT) -g3 -fsanitize=address 
+	@$(CC) $(HEADER_INC) $(HEADER_INC_LIBFT) $(SRCS) -o $(NAME) $(READLINE) $(LIBFT) -g3  
 	@echo "\t\t[ $(GREEN)✓$(NONE) ] $(GREEN)$(NAME)$(NONE) for GDB ready!"
 
 $(OBJS_DIR)%.o: $(SRCS_DIR)%.c $(HEADER)

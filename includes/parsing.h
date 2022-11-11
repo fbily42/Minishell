@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 08:43:36 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/10 13:17:50 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/10 15:21:09 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,6 @@
 # define PARSING_H
 
 # include "minishell.h"
-
-typedef struct s_context
-{
-	int		pipe[2];
-	int		nb_cmd;
-	char	**envp;
-	char	**my_paths;
-	char	*error;
-	char	*cmd;
-}				t_context;
 
 typedef enum e_type
 {
@@ -91,6 +81,18 @@ struct s_node
 	t_type		type;
 	t_data		data;
 };
+
+typedef struct s_context
+{
+	int		pipe[2];
+	int		nb_cmd;
+	char	**envp;
+	char	**my_paths;
+	char	*error;
+	char	*cmd;
+	t_node	*root;
+	int		*pchild;
+}				t_context;
 
 /* --- token.c --- */
 int		add_token(t_token **tokens, t_token *token, t_context *ctx);
@@ -218,6 +220,7 @@ void	new_print_tree_recur(t_node *tree, int level);
 
 /* --- signal.c --- */
 void	init_signal(void);
+void	init_signal_child(void);
 
 /* --- error.c --- */
 int	print_error_syntax(void);

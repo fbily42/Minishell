@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 10:01:49 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/10 13:16:14 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/10 15:18:18 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ int	we_create_word(char **tab, int i, t_context *ctx)
 				tab[i] = get_path_env(ctx->envp, copy);
 			else
 				tab[i] = ft_strdup("");
+			free(copy);
 			/*
 			copy = getenv(tab[i] + 1);
 			free(tab[i]);
@@ -136,7 +137,6 @@ int	we_create_word(char **tab, int i, t_context *ctx)
 		}
 		if (!tab[i])
 			return (clean_tab(tab, tab_len), free(copy), 0);
-		free(copy);
 	}
 	return (1);
 }
