@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 21:16:10 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/09 22:03:38 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/11 21:29:33 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,8 @@ bool	is_built_in(t_node *tree)
 	return (false);
 }
 
-bool	exec_built_in(t_node *tree, t_context *ctx, bool flag)
+bool	exec_built_in(t_node *tree, t_context *ctx, int fd)
 {
-	int	fd;
-	int	i;
-
-	i = 1;
-	if (flag == 0)
-		fd = ctx->pipe[STDOUT_FILENO];
-	else
-		fd = STDOUT_FILENO;
 	if (ft_strcmp(tree->data.c.value[0], "echo") == 0)
 	{
 		echo(tree->data.c.value, fd);
@@ -58,41 +50,58 @@ bool	exec_built_in(t_node *tree, t_context *ctx, bool flag)
 	}
 	else if (ft_strcmp(tree->data.c.value[0], "cd") == 0)
 	{
-		if (tree->data.c.value[1] != NULL)
+		if (execute_cd(tree, ctx) == true)
+			return (true);
+		return (false);
+	}
+	else if (exec_unset_export_exit(tree, ctx) == true)
+		return (true);
+	return (false);
+}
+
+bool	execute_cd(t_node *tree, t_context *ctx)
+{
+	if (tree->data.c.value[1] != NULL)
+	{
+		if (tree->data.c.value[2] != NULL)
+		{
+			ctx->error = ft_strjoin("PopCornShell: ", "cd: ");
+			ctx->error = strjoin_and_free_s1(ctx->error,
+					"too many arguments\n");
+			if (!ctx->error)
+				error_malloc(ctx);
+			ft_putstr_fd(ctx->error, STDERR_FILENO);
+			free(ctx->error);
+			ctx->error = NULL;
+			return (false);
+		}
+		else
 			cd(ctx, tree->data.c.value[1]);
 		return (true);
 	}
-	else if (ft_strcmp(tree->data.c.value[0], "unset") == 0)
+	return (true);
+}
+
+bool	exec_unset_export_exit(t_node *tree, t_context *ctx)
+{
+	int	i;
+
+	i = 1;
+	if (ft_strcmp(tree->data.c.value[0], "unset") == 0)
 	{
 		if (tree->data.c.value[1] != NULL && *ctx->envp)
-		{
 			while (tree->data.c.value[i])
-			{
 				ctx->envp = unset(ctx->envp, tree->data.c.value[i++]);
-				if (!ctx->envp)
-					return (false);
-			}
-		}
 		return (true);
 	}
 	else if (ft_strcmp(tree->data.c.value[0], "export") == 0)
 	{
 		if (tree->data.c.value[1] != NULL)
-		{
 			while (tree->data.c.value[i])
-			{
 				ctx->envp = export(ctx->envp, tree->data.c.value[i++]);
-				if (!ctx->envp)
-					return (false);
-			}
-		}
 		return (true);
 	}
 	else if (ft_strcmp(tree->data.c.value[0], "exit") == 0)
-	{
-		if (tree->data.c.value[1] != NULL)
-			ft_exit(tree->data.c.value[1]);
-		return (true);
-	}
+		ft_exit(ctx, tree->data.c.value);
 	return (false);
 }

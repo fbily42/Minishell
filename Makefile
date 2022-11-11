@@ -6,7 +6,7 @@
 #    By: fbily <fbily@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/19 14:13:03 by sbeylot           #+#    #+#              #
-#    Updated: 2022/11/10 20:55:58 by fbily            ###   ########.fr        #
+#    Updated: 2022/11/11 21:51:50 by fbily            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,6 +45,7 @@ SRCS_NAME	=	main.c\
 				exec_cmd_utils.c\
 				here_doc_and_path.c\
 				built_in.c\
+				built_in_2.c\
 				exec_built_in.c\
 				built_in_utils.c\
 				unset.c\
@@ -102,7 +103,7 @@ clean:
 	@echo "\t\t[ $(RED)✗$(NONE) ] objs/ directory"
 
 fclean: clean
-	@make fclean -C ./libft
+	@make --no-print-directory fclean -C ./libft
 	@rm -f $(NAME)
 	@rm -rf gmon.out
 	@echo "\t\t[ $(GREEN)✓$(NONE) ] Project $(GREEN)$(NAME)$(NONE) clean"

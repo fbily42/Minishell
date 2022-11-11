@@ -1,10 +1,19 @@
-CC			=	gcc
-CFLAGS		=	-Wall -Wextra -Werror
-RM			=	rm -f
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: fbily <fbily@student.42.fr>                +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2022/11/11 21:41:49 by fbily             #+#    #+#              #
+#    Updated: 2022/11/11 21:56:09 by fbily            ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME		=	libft.a 
 
-SRCS_DIR	=	srcs/
-SRCS_NAMES	=	ft_atoi.c\
+SRC_PATH = ./srcs/
+SRC =			ft_atoi.c\
 	 			ft_bzero.c\
 				ft_calloc.c\
 				ft_isalnum.c\
@@ -56,45 +65,47 @@ SRCS_NAMES	=	ft_atoi.c\
 				get_next_line_utils.c\
 				ft_split_utils.c
 
-SRCS		=	$(addprefix $(SRCS_DIR), $(SRCS_NAMES))
-OBJS_DIR	=	objs/
-OBJS		=	$(SRCS_NAMES:%.c=$(OBJS_DIR)%.o)
+SRCS = $(addprefix ${SRC_PATH}, ${SRC})
 
-HDR_NAMES	=	libft.h
-HDR_DIR		=	includes/
-HDRS		=	$(addprefix $(HDR_DIR), $(HDR_NAMES))
+OBJ_PATH	= obj/
+OBJ = ${SRC:.c=.o}
 
-HDR_INC 	=	$(addprefix -I./, $(HDR_DIR))
+OBJS	= $(addprefix $(OBJ_PATH), $(OBJ))
+
+INC = -I./includes/
+
+DEPS = $(addprefix ${OBJ_PATH}, ${SRC:.c=.d})
+
+CC = cc
+
+CFLAGS = -Wall -Wextra -Werror -MMD -MP
 
 RED 		=	\033[0;31m
 GREEN 		=	\033[0;32m
 NONE 		=	\033[0m
 
-all: creation $(NAME)
+all: $(NAME)
+
+${NAME} : ${OBJS}
+	@ar rc ${NAME} $^
 	@echo "\t\t[ $(GREEN)✓$(NONE) ] Libft ready!$(NONE)"
 
-creation:
-	@echo "\t\t[...] Libft creation..."
+$(OBJ_PATH)%.o: $(SRC_PATH)%.c
+	@mkdir -p ${OBJ_PATH}
+	@${CC} ${CFLAGS} ${INC} -o $@ -c $<
 
-cleaning:
-	@echo "\t\tCleaning libft directory..."
+clean:
+	@rm -rf $(OBJ_PATH)
+	@echo "\t\t[ $(RED)✗$(NONE) ] libft/$(OBJ_PATH) directory"
 
-$(NAME): $(OBJS) $(HDRS)
-	@ar rcs $@ $(OBJS)
-	@echo "\t\t[ $(GREEN)✓$(NONE) ] libft/libft.a"
-
-$(OBJS_DIR)%.o:	$(SRCS_DIR)%.c
-	@mkdir -p $(OBJS_DIR)
-	@$(CC) $(CFLAGS) $(HDR_INC) -c $< -o $@
-
-clean: 
-	@rm -rf $(OBJS_DIR)
-	@echo "\t\t[ $(RED)✗$(NONE) ] libft/$(OBJS_DIR) directory"
-
-fclean:		clean
+fclean: clean
 	@rm -f	$(NAME)
 	@echo "\t\t[ $(RED)✗$(NONE) ] libft/$(NAME) library"
 
 re:			fclean all
+
+-include ${DEPS}
+
+.SECONDARY: ${OBJ_PATH} ${OBJ} ${OBJS}
 
 .PHONY: all clean fclean re

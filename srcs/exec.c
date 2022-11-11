@@ -6,19 +6,11 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 20:37:52 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/10 20:55:06 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/11 21:33:37 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-// TODO : 
-//	Norminette CD
-//	Corriger echo -nnnnnnn
-//	exit_code : 126 == if (cmd ok but x_ok == -1)
-//				ne marche pas avec signaux.
-//	info.pids a free dans les childs ??
-//	Check valgrind --track-fds=yes pour command not found
 
 extern int	g_minishell_exit;
 
@@ -85,17 +77,18 @@ int	exec_pipe(t_node *tree, t_context *ctx, int *p_int)
 	return (childs);
 }
 
-//IF EXEC_BUILT_IN == FALSE ??? (>> Error unset or export a gerer)
 int	exec_cmd(t_node *tree, t_context *ctx, int *p_int)
 {
 	if (ctx->nb_cmd == 1 && is_built_in(tree) == true)
 	{
-		exec_built_in(tree, ctx, 0);
+		if (exec_built_in(tree, ctx, ctx->pipe[STDOUT_FILENO]) == true)
+			g_minishell_exit = 0;
+		else
+			g_minishell_exit = 1;
 		if (ctx->pipe[STDIN_FILENO] > 2)
 			close(ctx->pipe[STDIN_FILENO]);
 		if (ctx->pipe[STDOUT_FILENO] > 2)
 			close(ctx->pipe[STDOUT_FILENO]);
-		g_minishell_exit = 0;
 		return (0);
 	}
 	*p_int = fork();
@@ -125,10 +118,10 @@ void	child(t_node *tree, t_context *ctx)
 		close(ctx->pipe[STDOUT_FILENO]);
 	if (is_built_in(tree) == true)
 	{
-		exec_built_in(tree, ctx, 1);
-		clean_struct(ctx);
-		clean_tree(&ctx->root);
-		exit(EXIT_SUCCESS);
+		if (exec_built_in(tree, ctx, STDOUT_FILENO) == true)
+			exit_and_clean(ctx, EXIT_SUCCESS);
+		else
+			exit_and_clean(ctx, EXIT_FAILURE);
 	}
 	else
 		execute_cmd(tree, ctx);

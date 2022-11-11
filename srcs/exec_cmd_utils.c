@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 17:00:33 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/10 20:54:00 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/11 21:06:38 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 
 bool	find_cmd(t_node *tree, t_context *ctx)
 {
+	if (tree->data.c.value[0][0] == '\0')
+	{
+		ft_putstr_fd("PopCornShell: '' : Command not found\n", STDERR_FILENO);
+		return (false);
+	}
 	if (check_dot_slash(tree->data.c.value[0], ctx) == false)
 		return (false);
 	check_exceptions(tree->data.c.value[0], ctx);
@@ -30,9 +35,7 @@ bool	find_cmd(t_node *tree, t_context *ctx)
 		if (check_cmd_with_path(tree, ctx) == true)
 			return (true);
 	}
-	ft_putstr_fd(ctx->error, STDERR_FILENO);
-	free(ctx->error);
-	ctx->error = NULL;
+	print_error_cmd(ctx, tree);
 	return (false);
 }
 
@@ -59,6 +62,7 @@ bool	check_dot_slash(char *cmd, t_context *ctx)
 		ctx->error = NULL;
 		return (false);
 	}
+	free(ctx->error);
 	return (true);
 }
 
