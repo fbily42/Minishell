@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 08:43:36 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/11 12:54:15 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/12 14:10:43 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ typedef struct s_context
 }				t_context;
 
 /* --- token.c --- */
+int		is_single_dollar(t_token *token);
 int		add_token(t_token **tokens, t_token *token, t_context *ctx);
 t_token	*token_symbol(char **itr);
 void	tokenizer(char *line, t_token **tokens, t_context *ctx);
@@ -116,6 +117,7 @@ int		add_quoted_len(char **itr, t_type type);
 int		add_word_len(char **itr);
 int		add_dollar_len(char **itr);
 t_token	*init_token(char **itr, t_type type);
+int		var_len(char *str);
 
 /* --- token_debug.c --- */
 void	debug_token_type(int c);
@@ -155,6 +157,7 @@ int		dollar_inside(char *str);
 int		tab_length(char **tab);
 int		var_exist(char *str, char **envp);
 int		word_expansion_len(char **tab);
+void	we_create_word_utils(char **tab, int i, t_context *ctx, int tab_len);
 
 /* --- word_expansion_utils2.c --- */
 char	*ew_get_word(t_token **token, char **str, int option, t_context *ctx);
@@ -178,8 +181,6 @@ int		is_redirection_token(t_token *token);
 int		nbr_new_argument(t_token **token);
 int		update_cmd(t_token **token, t_node *tree, t_context *ctx);
 
-/* --- ast_node_redir.c --- */
-
 /* --- ast_node_redir_utils.c --- */
 t_node	*init_redir(t_token **token, t_context *ctx);
 void	init_node_redir(t_node **node);
@@ -202,6 +203,7 @@ void	clean_tree(t_node **tree);
 /* --- scanning.c --- */
 void	next_token(t_token **token);
 void	eat_token(t_token **token);
+int		readline_is_empty(char *line);
 
 /* --- parsing.c --- */
 t_node	*parsing(char *line, t_context *ctx);

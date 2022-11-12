@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 12:13:38 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/11 11:34:51 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/12 13:58:15 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,6 @@ int	add_dollar_len(char **itr)
 			break ;
 		if (itr_is_quote(*itr))
 			break ;
-		//if (peek(*itr) == '$')
-		//	break ;
 		i++;
 		next(itr);
 	}
@@ -92,4 +90,21 @@ t_token	*init_token(char **itr, t_type type)
 	token->next = NULL;
 	token->location = (t_slice){.start = *itr, .len = 0, .qnbr = 0, .elem = 0};
 	return (token);
+}
+
+int	var_len(char *str)
+{
+	int	i;
+
+	i = -1;
+	while (str[++i])
+	{
+		if (is_whitespace(str[i]))
+			return (i);
+		if (str[i] == '/')
+			return (i);
+		if (str[i] == '=')
+			return (i);
+	}
+	return (i);
 }

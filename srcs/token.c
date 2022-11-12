@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 11:03:15 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/11 12:20:46 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/12 13:57:50 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@
  * ||	Token list creation
  */
 
-/*
 static int	token_var_exist(char *str, char **envp, int len)
 {
 	int	i;
@@ -48,25 +47,7 @@ static int	token_var_exist(char *str, char **envp, int len)
 		return (0);
 	if (ft_strncmp(str, "$?", 2) == 0)
 		return (1);
-	len--;
-	str++;
-	while (envp[++i])
-	{
-		if (ft_strncmp(envp[i], str, len) == 0)
-			return (1);
-	}
-	return (0);
-}
-*/
-
-static int	token_var_exist(char *str, char **envp, int len)
-{
-	int	i;
-
-	i = -1;
-	if (!*envp)
-		return (0);
-	if (ft_strncmp(str, "$?", 2) == 0)
+	if (str[0] == '$' && str[1] == '\0')
 		return (1);
 	len--;
 	str++;
@@ -89,10 +70,12 @@ int	is_single_dollar(t_token *token)
 	{
 		next(&ptr);
 		if (itr_is_quote(ptr))
-				return (0);
-		while (has_next(ptr))
+			return (0);
+		while (has_next(ptr) && !is_whitespace(*ptr))
 		{
 			if (peek(ptr) == '$')
+				return (0);
+			if (itr_is_quote(ptr))
 				return (0);
 			next(&ptr);
 		}
@@ -109,7 +92,7 @@ int	add_token(t_token **tokens, t_token *token, t_context *ctx)
 		return (0);
 	if (is_single_dollar(token) && \
 			!token_var_exist(token->location.start, ctx->envp, \
-				token->location.len))
+				var_len(token->location.start)))
 		return (free(token), 1);
 	if (*tokens == NULL)
 		*tokens = token;
