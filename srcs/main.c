@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 14:01:41 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/11 21:19:35 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/12 14:18:26 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,13 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	tree = NULL;
+	/*
 	if (isatty(STDIN_FILENO) == 0)
 	{
 		perror("PopCornShell ");
 		return (1);
 	}
+	*/
 	g_minishell_exit = 0;
 	if (*envp)
 		ctx.envp = copy_env(envp);
@@ -35,7 +37,7 @@ int	main(int argc, char **argv, char **envp)
 	init_signal();
 	minishell(tree, &ctx);
 	free_2d(ctx.envp);
-	return (0);
+	return (g_minishell_exit);
 }
 
 void	minishell(t_node *tree, t_context *ctx)
@@ -45,13 +47,14 @@ void	minishell(t_node *tree, t_context *ctx)
 	line = NULL;
 	while (1)
 	{
+		rl_outstream = stderr;
 		line = readline("🍿PopCornShell>> ");
 		if (line == NULL)
 		{
-			write(1, "exit\n", 5);
+			//write(1, "exit\n", 5);)
 			break ;
 		}
-		else if (*line && line[0])
+		else if (*line && line[0] && !readline_is_empty(line))
 			add_history(line);
 		tree = parsing(line, ctx);
 		exec(tree, ctx);

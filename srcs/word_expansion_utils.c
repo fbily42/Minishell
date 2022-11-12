@@ -6,12 +6,13 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 15:45:32 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/11 12:55:52 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/12 14:07:43 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+extern int	g_minishell_exit;
 /*
  * int dollar_inside(char *str)
  * @str:	string
@@ -88,4 +89,27 @@ int	word_expansion_len(char **tab)
 			word_len++;
 	}
 	return (word_len);
+}
+
+void	we_create_word_utils(char **tab, int i, t_context *ctx, int tab_len)
+{
+	char	*copy;
+
+	if (tab[i][0] == '$' && tab[i][1] == '?')
+	{
+		free(tab[i]);
+		tab[i] = ft_itoa(g_minishell_exit);
+	}
+	else if (tab[i][0] == '$' && tab[i][1] != '\0')
+	{
+		copy = ft_strjoin(tab[i] + 1, "=");
+		if (!copy)
+			return (clean_tab(tab, tab_len));
+		free(tab[i]);
+		if (var_exist(copy, ctx->envp))
+			tab[i] = get_path_env(ctx->envp, copy);
+		else
+			tab[i] = ft_strdup("");
+		free(copy);
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/26 13:42:23 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/10 15:25:40 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/12 14:17:51 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	handle_sigint(int signum, siginfo_t *info, void *i)
 			write(1, "\n", 1);
 			rl_on_new_line();
 			rl_redisplay();
+			g_minishell_exit = 130;
 		}
 		else if (info->si_pid == 0)
 		{
@@ -41,8 +42,13 @@ void	handler_quit_child(int signum, siginfo_t *info, void *i)
 	{
 		if (info->si_pid == 0)
 		{
-			ft_putstr_fd("Quit (core dumped)\n", 2);
+			ft_putstr_fd("Quit (core dumped)\n", STDOUT_FILENO);
 			g_minishell_exit = 131;
+		}
+		else
+		{
+			write(1, "\b \b", 3);
+			write(1, "\b \b", 3);
 		}
 	}
 }
@@ -56,7 +62,8 @@ void	init_signal(void)
 	sa_int.sa_sigaction = &handle_sigint;
 	sa_int.sa_flags = SA_SIGINFO;
 	sa_quit = (struct sigaction){0};
-	sa_quit.sa_handler = SIG_IGN;
+	sa_quit.sa_sigaction = &handler_quit_child;
+	sa_quit.sa_flags = SA_SIGINFO;
 	sigaction(SIGINT, &sa_int, NULL);
 	sigaction(SIGQUIT, &sa_quit, NULL);
 }

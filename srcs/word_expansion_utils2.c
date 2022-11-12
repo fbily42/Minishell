@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 12:15:26 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/10 12:56:13 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/12 13:13:40 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,12 @@ char	*ew_get_word(t_token **token, char **str, int option, t_context *ctx)
 	if (!str)
 		return (NULL);
 	add_word_len(&(*token)->location.start);
-	if (dollar_inside(*str) >= 0 && option)
+	if (ft_strcmp(*str, "$") == 0 && itr_is_quote(pstr))
+	{
+		free(*str);
+		*str = ft_strdup("");
+	}
+	else if (dollar_inside(*str) >= 0 && option)
 		*str = word_expansion(str, ctx);
 	return (*str);
 }

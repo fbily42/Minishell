@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 09:08:49 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/11 11:43:51 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/12 13:41:11 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ int	is_cmd_token(t_token *token)
 	if (!token)
 		return (0);
 	if (token->type == WORD || token->type == SQUOTE || token->type == DQUOTE)
-			
 		return (1);
 	return (0);
 }
