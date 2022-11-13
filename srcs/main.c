@@ -6,11 +6,22 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 14:01:41 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/12 14:18:26 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/13 22:42:50 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/*
+TODO FLO :
+
+	EXPORT	=> Gerer nom variable env qui doit uniquement contenir : A-z / 0-9 / _
+			=> Error malloc dans swap_string ? Voir avec Simon methode opti..
+			
+	UNSET	=> Aucun message d'erreur en E3 sur "unset ++++++++" ?????
+	
+	CD		=> Norminette... +25 lignes sur fonction CD(built_in.c) (T_T)
+*/
 
 int	g_minishell_exit;
 
@@ -51,7 +62,7 @@ void	minishell(t_node *tree, t_context *ctx)
 		line = readline("🍿PopCornShell>> ");
 		if (line == NULL)
 		{
-			//write(1, "exit\n", 5);)
+			//write(1, "exit\n", 5);
 			break ;
 		}
 		else if (*line && line[0] && !readline_is_empty(line))

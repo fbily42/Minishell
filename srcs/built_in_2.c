@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 21:15:11 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/11 17:12:54 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/13 20:44:02 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	ft_exit(t_context *ctx, char **args)
 	unsigned int	exit_code;
 
 	ctx->error = ft_strdup("PopCornShell: exit: ");
+	check_arg_exit(ctx, args[1]);
 	if (!args[1])
 	{
 		ft_putstr_fd("exit\n", STDERR_FILENO);
@@ -33,7 +34,6 @@ void	ft_exit(t_context *ctx, char **args)
 		ctx->error = NULL;
 		return ;
 	}
-	check_arg_exit(ctx, args[1]);
 	exit_code = ft_atoui(args[1]);
 	ft_putstr_fd("exit\n", STDERR_FILENO);
 	exit_and_clean(ctx, (unsigned char)exit_code);

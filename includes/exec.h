@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 20:35:31 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/11 21:30:32 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/13 22:38:10 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void			free_2d(char **str);
 
 /**************		BUILT_IN.C		**************/
 int				check_option_echo(char	**str, int *flag);
-void			cd(t_context *ctx, char	*path);
+bool			cd(t_context *ctx, char	*path);
 void			echo(char **str, int fd);
 void			env(char **envp, int fd);
 void			pwd(int fd);
@@ -90,6 +90,7 @@ bool			is_built_in(t_node *tree);
 char			**unset(char **envp, char *var);
 
 /**************		EXPORT.C		**************/
+void			sort_and_print_env(t_context *ctx);
 char			**export(char **envp, char *var);
 
 /**************		BUILT_IN_UTILS.C		**************/

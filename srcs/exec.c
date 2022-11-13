@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 20:37:52 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/11 21:33:37 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/13 20:29:50 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ void	exec(t_node *tree, t_context *ctx)
 			if (g_minishell_exit < 130)
 				g_minishell_exit = WTERMSIG(info.status) + 128;
 		}
+		if (info.pids[ctx->nb_cmd - 1] == 0)
+			g_minishell_exit = 1;
 	}
 	clean_struct(ctx);
 }
@@ -43,8 +45,13 @@ int	exec_node(t_node *tree, t_context *ctx, int *p_int)
 	if (tree->type == CMD)
 	{
 		if (tree->data.b.right != NULL && tree->data.b.right->type == REDIR)
+		{
 			if (update_redir(tree->data.b.right, ctx) == false)
+			{
+				g_minishell_exit = 1;
 				return (0);
+			}
+		}
 		if (tree->data.b.left)
 			return (exec_cmd(tree->data.b.left, ctx, p_int));
 		else

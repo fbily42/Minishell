@@ -6,7 +6,7 @@
 #    By: fbily <fbily@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/19 14:13:03 by sbeylot           #+#    #+#              #
-#    Updated: 2022/11/11 21:51:50 by fbily            ###   ########.fr        #
+#    Updated: 2022/11/13 21:42:18 by fbily            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,7 +49,8 @@ SRCS_NAME	=	main.c\
 				exec_built_in.c\
 				built_in_utils.c\
 				unset.c\
-				export.c
+				export.c\
+				export_2.c
 
 SRCS_DIR	=	srcs/
 SRCS		=	$(addprefix $(SRCS_DIR), $(SRCS_NAME))
