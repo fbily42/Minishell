@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 14:01:41 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/13 22:42:50 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/14 15:14:38 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,11 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	tree = NULL;
-	/*
 	if (isatty(STDIN_FILENO) == 0)
 	{
 		perror("PopCornShell ");
 		return (1);
 	}
-	*/
 	g_minishell_exit = 0;
 	if (*envp)
 		ctx.envp = copy_env(envp);
@@ -58,11 +56,10 @@ void	minishell(t_node *tree, t_context *ctx)
 	line = NULL;
 	while (1)
 	{
-		rl_outstream = stderr;
 		line = readline("🍿PopCornShell>> ");
 		if (line == NULL)
 		{
-			//write(1, "exit\n", 5);
+			write(1, "exit\n", 5);
 			break ;
 		}
 		else if (*line && line[0] && !readline_is_empty(line))

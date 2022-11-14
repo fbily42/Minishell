@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 20:39:42 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/10 20:54:02 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/14 15:14:09 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	heredoc(t_node	*node, t_context *ctx)
 			close(fd[1]);
 			return (fd[0]);
 		}
+		heredoc = word_expansion(&heredoc, ctx);
 		ft_putendl_fd(heredoc, fd[1]);
 		free(heredoc);
 	}
