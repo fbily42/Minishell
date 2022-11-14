@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 20:39:42 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/14 15:14:09 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/14 22:24:23 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,4 +107,12 @@ bool	create_paths(t_context *ctx)
 		i++;
 	}
 	return (true);
+}
+
+void	ft_close(t_context *ctx)
+{
+	if (ctx->pipe[STDIN_FILENO] > 2)
+		close(ctx->pipe[STDIN_FILENO]);
+	if (ctx->pipe[STDOUT_FILENO] > 2)
+		close(ctx->pipe[STDOUT_FILENO]);
 }

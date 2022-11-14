@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 17:07:59 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/07 09:09:33 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/14 21:40:56 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ bool	update_redir(t_node *tree, t_context *ctx)
 			return (false);
 	}
 	if (tree->data.b.right != NULL)
-		update_redir(tree->data.b.right, ctx);
+		if (update_redir(tree->data.b.right, ctx) == false)
+			return (false);
 	return (true);
 }
 
@@ -75,8 +76,6 @@ bool	redir_out(t_node *tree, t_context *ctx)
 
 bool	open_file_in(t_context *ctx, t_node *tree)
 {
-	if (ctx->pipe[0] > 2)
-		close(ctx->pipe[0]);
 	ctx->pipe[0] = open(tree->data.r.file, O_RDONLY);
 	if (ctx->pipe[0] == -1)
 	{
@@ -96,8 +95,6 @@ bool	open_file_in(t_context *ctx, t_node *tree)
 
 bool	open_file_out(t_context *ctx, t_node *tree, bool flag)
 {
-	if (ctx->pipe[1] > 2)
-		close(ctx->pipe[1]);
 	if (flag == 0)
 		ctx->pipe[1] = open(tree->data.r.file, O_CREAT
 				| O_WRONLY | O_TRUNC, 0644);

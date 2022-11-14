@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 20:35:31 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/13 22:38:10 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/14 22:24:42 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ bool			redir_in(t_node *tree, t_context *ctx);
 int				heredoc(t_node	*node, t_context *ctx);
 bool			create_paths(t_context *ctx);
 bool			find_paths(t_context *ctx);
+void			ft_close(t_context *ctx);
 
 /**************		EXEC_CMD_UTILS.C		**************/
 bool			check_cmd_with_path(t_node *tree, t_context *ctx);
