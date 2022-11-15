@@ -6,42 +6,11 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 10:01:49 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/12 14:07:44 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/15 09:22:09 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*
- * char		*extract_word(t_token **token)
- * @token:	Token list
- * ||	Create a tab of all element of the token, expand if needed than return
- * ||	the expanded token word
- * ||	ex: [$COLORTERM" "$LESS] return [truecolor -R]
- *
- * int		we_create_word(char **tab, char **envp)
- * @tab:	
- * @envp:	Environment Variable
- *
- * char		*word_expansion(char **str)
- * @str:	Adress of a string
- * ||	Take a string and split it for every dollar sign inside.
- * ||	Use we_create_word() to replace the $variable by the correct output
- * ||	or empty string if no variable found
- * ||	Free the string @str
- * ||	After, recreate a string with the correct output and return it
- *
- * int	we_create_word(char **tab, char **envp)
- * @tab:	Tab of the split string (of the token)
- * @envp:	Environment of the shell
- * ||	Go throught the tab and replace all the $variable with the correct output
- * ||	return 1 if succes or 0 if allocation fail
- *
- * char	*we_reconstruct_word(char **tab, int index)
- * @tab:	Tab of the split string with $ replace
- * @index:	index (optimisation)
- * ||	Reconstruct a string from a tab
- */
 
 extern int	g_minishell_exit;
 

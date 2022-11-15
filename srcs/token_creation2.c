@@ -6,26 +6,11 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 11:13:53 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/08 11:29:39 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/15 09:21:54 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*
- * t_token		*token_redir(char **itr) && token_redir_fd(char **itr)
- * @itr:		Pointer on the beginning of the token 
- * || token_redir =		Token Creation of redirection type 
- * || token_redir_fd =	Token Creation of redirection type with fd
- *
- * t_token		*token_redir2(char **itr) && token_redir2_fd(char **itr)
- * @itr:		Pointer on the beginning of the token 
- * || token_redir2 =		Token Creation of redirection type 
- * || token_redir2_fd =		Token Creation of redirection type with fd
- *
- */
-
-//Error [ < ] [ > ] [ << ] [ >> ] 
 
 t_token	*token_redir_fd(char **itr)
 {

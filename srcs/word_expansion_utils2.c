@@ -6,29 +6,11 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 12:15:26 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/12 13:13:40 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/15 09:22:24 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*
- *	char	*ew_get_word(t_token **token, char **str)
- *	@token:		Token list
- *	@str:		Adress of the string
- *	||		If the token is a WORD, return the correct string from it
- *
- *	char	*ew_get_dquote(t_token **token, char **str)
- *	@token:		Token List
- *	@str:		Adress of a string
- *	||  	If the token is a DQUOTE, return the correct string from it
- *
- *	char	*ew_get_squote(t_token **token, char **str)
- *	@token:		Token List
- *	@str:		Adress of a string
- *	||  	If the token is a SQUOTE, return the correct string from it
-
- */
 
 char	*ew_get_word(t_token **token, char **str, int option, t_context *ctx)
 {

@@ -6,39 +6,11 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 11:04:06 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/11 12:32:52 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/15 09:21:23 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*
- * int	is_whitespace(char c)
- * @c:	Current char
- * ||	Is the char a whitespace
- * ||	1 == yes
- * ||	0 == no
- *
- * int	is_ignored(char c)
- * @c:	Current char
- * ||	Do we need to ignore those char
- * ||	1 == yes
- * ||	0 == No
- *
- * int	is_symbol(char *c)
- * @c:	Pointer on the current char
- * ||	Return the symbol type of the char for the token.type
- *
- * int	is_closed(char *itr, char quote)
- * @itr:	Pointer on the current char
- * @quote:	Quote type (" or ')
- * ||	Check if the quote is close
- * ||	1 == yes
- * ||	0 == no
- *
- * void	free_token(t_token **token)
- * ||	Free token list
- */
 
 int	is_whitespace(char c)
 {

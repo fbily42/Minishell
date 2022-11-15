@@ -6,30 +6,11 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 09:08:49 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/12 13:41:11 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/15 09:22:44 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*
- * int	is_cmd_token(t_token *token)
- * @token:		Token List
- * ||	Check if the token is a cmd token
- *
- * int	is_redirection_token(t_token *token)
- * ||	Check if the token is a redirection one
- *
- * int	nbr_new_argument(t_token **token)
- * ||	Return the nbr of new elements for the cmd
- * ||	ex: echo Simon >Output Beylot Return 1
- * ||	the final cmd is echo Simon Beylot 
- *
- * int	update_cmd(t_token **token, t_node *tree)
- * @token:		Token List;
- * @tree:		Node needed to be update
- * ||	Update the cmd node if needed
- */
 
 int	is_cmd_token(t_token *token)
 {

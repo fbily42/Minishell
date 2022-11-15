@@ -6,31 +6,13 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 15:45:32 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/12 14:07:43 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/15 09:22:18 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 extern int	g_minishell_exit;
-/*
- * int dollar_inside(char *str)
- * @str:	string
- * ||	Check if a dollar is present in the string
- *
- * int tab_length(char **tab)
- * @tab:	Array of string
- * ||	Return the length of the array
- *
- * int	var_exist(char *str, char **envp)
- * @str:	String
- * @envp:	Shell Environment
- * ||	Check if the variable exist in the shell env
- *
- * int	word_expansion_len(char **tab)
- * @tab:	Array of string
- * || 	Return the length of the string with replace value
- */
 
 int	dollar_inside(char *str)
 {

@@ -6,29 +6,11 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 11:10:31 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/11 12:30:02 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/15 09:21:32 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*
- * t_token		*token_word(char **itr)
- * @itr:		Pointer on the beginning of the token 
- * ||	Token creation of WORD type 
- * 
- * t_token		*token_single_symbol(char **itr)
- * @itr:		Pointer on the beginning of the token 
- * ||	Token creation of type < > |
- *
- * t_token		*token_quoted(char **itr)
- * @itr:		Pointer on the beginning of the token 
- * ||	Token Creation of type "" or '' if itr == ' or "
- *
- * t_token		*token_append_heredoc(char **itr)
- * @itr:		Pointer on the beginning of the token 
- * ||	Token Creation of type << >>
- */
 
 t_token	*token_word(char **itr)
 {

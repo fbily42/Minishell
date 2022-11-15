@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 15:22:45 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/12 13:46:04 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/15 09:26:30 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,11 @@ int	parse_do_cmd(t_token **token, t_node **node, t_context *ctx)
 
 int	parse_do_redir(t_token **token, t_node **node, t_context *ctx)
 {
+	t_node	*last;
+
+	last = get_last_redir(*node);
 	if ((*node)->data.b.right != NULL)
-		get_last_redir(*node)->data.b.right = node_arg(token, ctx);
+		last->data.b.right = node_arg(token, ctx);
 	else
 		(*node)->data.b.right = node_arg(token, ctx);
 	if (!(*node)->data.b.right)

@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 08:43:36 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/14 20:07:23 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/15 09:24:23 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,15 +226,14 @@ void	init_signal(void);
 void	init_signal_child(void);
 
 /* --- error.c --- */
-int	print_error_token(void);
-int	syntax_error_newline(void);
-int	syntax_error_redir_token(t_token *token);
-int	syntax_error_pipe(void);
-int	error_token(t_token **token, char **itr);
+int		print_error_token(void);
+int		syntax_error_newline(void);
+int		syntax_error_redir_token(t_token *token);
+int		syntax_error_pipe(void);
+int		error_token(t_token **token, char **itr);
 
 /* --- buildin_pwd.c --- */
 void	buildin_pwd(void);
-t_token *token_delim(char **itr);
-
+t_token	*token_delim(char **itr);
 
 #endif

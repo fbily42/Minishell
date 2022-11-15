@@ -6,25 +6,11 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 12:13:38 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/12 13:58:15 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/15 09:22:01 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*
- * int	add_quoted_len(char **itr, t_type type)
- * @itr:		Pointer on the beginning of the token 
- * @type:		Token type
- * ||	Length of a quoted element
- *
- * int	add_word_len(char **itr)
- * @itr:		Pointer on the beginning of the token 
- * @type:		Token type
- * ||	Length of a word element
- * Those functions increment the len of the token 
- * (token.location.len)
- */
 
 int	add_quoted_len(char **itr, t_type type)
 {

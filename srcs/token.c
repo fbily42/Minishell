@@ -6,37 +6,11 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 11:03:15 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/12 13:57:50 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/15 09:21:03 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/* 
- * t_token:
- * @type:		Token type
- * @location:	Information of the token
- *
- * t_slice:
- * @start:		Pointer on the beginning of the token 
- * @len:		Token length
- * @qnbr:		Number of quoted elements (optionnal) 
- * @elem:		Number of element in the token (ex:Minishell$PATHok$LESS == 4)
- *
- * int		add_token(t_token **tokens, t_token *token)
- * @tokens:		Token list
- * @token:		New token
- * || Add a new token in the list
- *
- * t_token	*token_symbol(char **itr)
- * @itr:		Pointer on the beginning of the token
- * ||	Token creation depending of a symbol (ex: < > | etc...)
- *
- * void		tokenizer(char *line, t_token **token)
- * @line:		User Input	
- * @token:		Token List
- * ||	Token list creation
- */
 
 static int	token_var_exist(char *str, char **envp, int len)
 {

@@ -6,15 +6,11 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 11:09:13 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/10 12:32:41 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/15 09:21:12 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*
- * For Debugging purposes
- */
 
 void	debug_token_type(int c)
 {
