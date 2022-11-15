@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 20:35:31 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/15 15:58:54 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/15 20:46:49 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void			env(char **envp, int fd);
 void			pwd(int fd);
 
 /**************		BUILT_IN_2.C		**************/
-void			check_arg_exit(t_context *ctx, char *str);
+void			check_arg_exit(t_context *ctx, char *str, long long *exit_code);
 void			ft_exit(t_context *ctx, char **args);
 
 /**************		EXEC_BUILT_IN.C		**************/
@@ -96,7 +96,7 @@ char			**export(char **envp, char *var, t_context *ctx);
 
 /**************		BUILT_IN_UTILS.C		**************/
 bool			is_in_env(char	**envp, char *var);
-unsigned int	ft_atoui(const char *nptr);
+long long		ft_atoll_capped(const char *nptr, int *flag);
 bool			check_var_name(char *var);
 int				find_len_var(char *var);
 char			*find_var(char *var);

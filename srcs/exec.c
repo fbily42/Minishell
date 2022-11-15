@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 20:37:52 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/15 16:55:08 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/15 17:53:33 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ void	exec(t_node *tree, t_context *ctx)
 			if (info.pids[info.i] > 0)
 				waitpid(info.pids[info.i], &info.status, 0);
 		}
-		if (WIFEXITED(info.status))
-			g_minishell_exit = WEXITSTATUS(info.status);
-		else if (WIFSIGNALED(info.status))
+		if (g_minishell_exit < 128)
 		{
-			if (g_minishell_exit < 130)
-				g_minishell_exit = WTERMSIG(info.status) + 128;
+			if (WIFEXITED(info.status))
+					g_minishell_exit = WEXITSTATUS(info.status);
+			else if (WIFSIGNALED(info.status))
+					g_minishell_exit = WTERMSIG(info.status) + 128;
 		}
 		if (info.pids[ctx->nb_cmd - 1] == -1)
 			g_minishell_exit = 1;

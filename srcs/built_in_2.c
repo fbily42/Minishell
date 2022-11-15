@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 21:15:11 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/15 16:31:58 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/15 21:06:02 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_exit(t_context *ctx, char **args)
 {
-	unsigned int	exit_code;
+	long long	exit_code;
 
 	ctx->error = ft_strdup("PopCornShell: exit: ");
 	if (!args[1])
@@ -22,7 +22,7 @@ void	ft_exit(t_context *ctx, char **args)
 		ft_putstr_fd("exit\n", STDERR_FILENO);
 		exit_and_clean(ctx, 0);
 	}
-	check_arg_exit(ctx, args[1]);
+	check_arg_exit(ctx, args[1], &exit_code);
 	if (args[2])
 	{
 		ctx->error = strjoin_and_free_s1(ctx->error, "too many arguments\n");
@@ -34,21 +34,23 @@ void	ft_exit(t_context *ctx, char **args)
 		ctx->error = NULL;
 		return ;
 	}
-	exit_code = ft_atoui(args[1]);
 	ft_putstr_fd("exit\n", STDERR_FILENO);
 	exit_and_clean(ctx, (unsigned char)exit_code);
 }
 
-void	check_arg_exit(t_context *ctx, char *str)
+void	check_arg_exit(t_context *ctx, char *str, long long *exit_code)
 {
 	int	i;
+	int	flag;
 
 	i = 0;
+	flag = 0;
+	*exit_code = ft_atoll_capped(str, &flag);
 	if (str[i] == '-' || str[i] == '+')
 		i++;
 	while (str[i])
 	{
-		if (ft_isdigit(str[i]) == 0)
+		if (ft_isdigit(str[i]) == 0 || flag > 0)
 		{
 			ctx->error = strjoin_and_free_s1(ctx->error, str);
 			ctx->error = strjoin_and_free_s1(ctx->error,
@@ -83,21 +85,27 @@ bool	cd(t_context *ctx, char	*path)
 	char	*oldpwd;
 	char	*pwd;
 
-	if (getcwd(dir, sizeof(dir)) == NULL)
-		perror("Getcwd ");
-	oldpwd = ft_strjoin("OLDPWD=", dir);
-	if (!oldpwd)
-		error_malloc(ctx);
-	ctx->envp = export(ctx->envp, oldpwd, ctx);
+	oldpwd = NULL;
+	if (getcwd(dir, sizeof(dir)) != NULL)
+	{
+		oldpwd = ft_strjoin("OLDPWD=", dir);
+		if (!oldpwd)
+			error_malloc(ctx);
+	}
 	if (chdir(path) == -1)
 		return (print_error_cd(ctx, oldpwd, path), false);
-	free(oldpwd);
-	if (getcwd(dir, sizeof(dir)) == NULL)
-		perror("Getcwd ");
-	pwd = ft_strjoin("PWD=", dir);
-	if (!pwd)
-		error_malloc(ctx);
-	ctx->envp = export(ctx->envp, pwd, ctx);
-	free(pwd);
+	if (oldpwd)
+	{
+		ctx->envp = export(ctx->envp, oldpwd, ctx);
+		free(oldpwd);
+	}
+	if (getcwd(dir, sizeof(dir)) != NULL)
+	{
+		pwd = ft_strjoin("PWD=", dir);
+		if (!pwd)
+			error_malloc(ctx);
+		ctx->envp = export(ctx->envp, pwd, ctx);
+		free(pwd);
+	}
 	return (true);
 }

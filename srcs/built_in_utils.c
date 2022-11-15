@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 20:09:28 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/09 21:55:43 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/15 20:44:57 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,31 +66,31 @@ int	find_len_var(char *var)
 	return (-1);
 }
 
-unsigned int	ft_atoui(const char *nptr)
+long long	ft_atoll_capped(const char *nptr, int *flag)
 {
-	int				i;
 	int				j;
-	unsigned int	nb;
-	unsigned char	*cp_nptr;
+	long long		nb;
 
 	if (nptr == NULL)
 		return (0);
-	i = 0;
 	j = 1;
 	nb = 0;
-	cp_nptr = (unsigned char *)nptr;
-	while (cp_nptr[i] == 32 || (cp_nptr[i] >= 9 && cp_nptr[i] <= 13))
-		i++;
-	if (cp_nptr[i] == '-' || cp_nptr[i] == '+')
+	while (*nptr == 32 || (*nptr >= 9 && *nptr <= 13))
+		nptr++;
+	if (*nptr == '-' || *nptr == '+')
 	{
-		if (cp_nptr[i] == '-')
+		if (*nptr == '-')
 			j = -j;
-		i++;
+		nptr++;
 	}
-	while (cp_nptr[i] >= '0' && cp_nptr[i] <= '9')
+	while (*nptr >= '0' && *nptr <= '9')
 	{
-		nb = nb * 10 + cp_nptr[i] - '0';
-		i++;
+		if (j > 0 && (LLONG_MAX - *nptr + '0') / 10 < nb)
+			return (++*flag, 0);
+		if (j < 0 && (LLONG_MAX + *nptr - '0') / 10 > -nb)
+			return (++*flag, 0);
+		nb = nb * 10 + *nptr - '0';
+		nptr++;
 	}
 	return (nb * j);
 }
