@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 08:43:36 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/15 09:24:23 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/15 17:40:17 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ typedef struct s_context
 	int		pipe[2];
 	int		fd_to_close;
 	int		nb_cmd;
+	int		f_export;
 	char	**envp;
 	char	**my_paths;
 	char	*error;
@@ -223,7 +224,6 @@ void	new_print_tree_recur(t_node *tree, int level);
 
 /* --- signal.c --- */
 void	init_signal(void);
-void	init_signal_child(void);
 
 /* --- error.c --- */
 int		print_error_token(void);

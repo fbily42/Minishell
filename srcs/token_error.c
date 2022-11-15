@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_error.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/26 13:09:03 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/11 12:33:08 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/15 16:53:48 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,14 @@ extern int	g_minishell_exit;
 
 int	print_error_token(void)
 {
-	ft_putstr_fd("PopCornshell: syntax error, unclosed quote\n", 2);
+	ft_putstr_fd("PopCornShell: syntax error, unclosed quote\n", 2);
 	g_minishell_exit = 2;
 	return (1);
 }
 
 int	syntax_error_newline(void)
 {
-	ft_putstr_fd("PopCornshell: syntax error near unexpected token 'newline'\n"\
+	ft_putstr_fd("PopCornShell: syntax error near unexpected token 'newline'\n"\
 		, 2);
 	g_minishell_exit = 2;
 	return (2);
@@ -32,16 +32,16 @@ int	syntax_error_newline(void)
 int	syntax_error_redir_token(t_token *token)
 {
 	if (token->type == APPEND)
-		ft_putstr_fd("PopCornshell: syntax error near unexpected token '>>'\n" \
+		ft_putstr_fd("PopCornShell: syntax error near unexpected token '>>'\n" \
 			, 2);
 	else if (token->type == HEREDOC)
-		ft_putstr_fd("PopCornshell: syntax error near unexpected token '<<'\n" \
+		ft_putstr_fd("PopCornShell: syntax error near unexpected token '<<'\n" \
 			, 2);
 	else if (token->type == REDIRIN)
-		ft_putstr_fd("PopCornshell: syntax error near unexpected token '<'\n" \
+		ft_putstr_fd("PopCornShell: syntax error near unexpected token '<'\n" \
 			, 2);
 	else if (token->type == REDIROUT)
-		ft_putstr_fd("PopCornshell: syntax error near unexpected token '>'\n" \
+		ft_putstr_fd("PopCornShell: syntax error near unexpected token '>'\n" \
 			, 2);
 	g_minishell_exit = 2;
 	return (2);
@@ -49,7 +49,7 @@ int	syntax_error_redir_token(t_token *token)
 
 int	syntax_error_pipe(void)
 {
-	ft_putstr_fd("Popcornshell: syntax error near \
+	ft_putstr_fd("PopcornShell: syntax error near \
 		unexpected token '|'\n", 2);
 	g_minishell_exit = 2;
 	return (2);

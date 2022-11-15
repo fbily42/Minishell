@@ -6,14 +6,14 @@
 #    By: fbily <fbily@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/19 14:13:03 by sbeylot           #+#    #+#              #
-#    Updated: 2022/11/13 21:42:18 by fbily            ###   ########.fr        #
+#    Updated: 2022/11/15 17:43:24 by fbily            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # BASE INFO
 NAME		=	minishell	
 CC			=	cc
-CFLAGS		=	-Wall -Wextra -Werror 
+CFLAGS		=	-Wall -Wextra -Werror -MMD -MP
 # SRCS
 SRCS_NAME	=	main.c\
 				token.c\
@@ -57,7 +57,8 @@ SRCS		=	$(addprefix $(SRCS_DIR), $(SRCS_NAME))
 
 # OBJS
 OBJS_DIR	=	objs/
-OBJS		=	$(SRCS_NAME:%.c=$(OBJS_DIR)%.o)
+OBJ 		= ${SRCS_NAME:.c=.o}
+OBJS		= $(addprefix $(OBJS_DIR), $(OBJ))
 
 #LIBFT
 LIBFT_INC	= -L./libft
@@ -65,39 +66,31 @@ LIBFT_A		=	-lft
 LIBFT		=	$(addprefix $(LIBFT_INC) , $(LIBFT_A))
 
 #HEADER
-HEADER		=	./includes/minishell.h
-HEADER_INC	=	-I./includes	
-HEADER_INC_LIBFT	=	-I./libft/includes
+HEADER_INC	=	-I./includes/
+HEADER_INC_LIBFT	=	-I./libft/includes/
 #READLINE
 READLINE	=	-lreadline
+
+DEPS		=	$(addprefix $(OBJS_DIR), $(SRCS_NAME:.c=.d))
 
 RED 		=	\033[0;31m
 GREEN 		=	\033[0;32m
 NONE 		=	\033[0m
 
-all: info compile_libft $(NAME)
-	@echo "\t\t[ $(GREEN)✓$(NONE) ] $(GREEN)$(NAME)$(NONE) ready!"
+all: $(NAME)
 
-compile_libft:
+$(NAME): $(OBJS)
+	make --no-print-directory header
 	@make -C ./libft --no-print-directory
-
-$(NAME): $(OBJS) $(HEADER)
-	@$(CC) $(CFLAGS) $(HEADER_INC) $(HEADER_INC_LIBFT) $(OBJS) $(READLINE) $(LIBFT) -o $(NAME)
-
-malloc_test: compile_libft $(OBJS) $(HEADER)
-	$clang $(CFLAGS) -g -fsanitize=undefined -rdynamic -o $@ $(OBJS) $(HEADER_INC) $(HEADER_INC_LIBFT) $(LIBFT) $(READLINE) -L. -lmallocator
-   
+	@$(CC) $(CFLAGS) $(OBJS) $(READLINE) $(LIBFT) -o $(NAME)
+	@echo "\t\t[ $(GREEN)✓$(NONE) ] $(GREEN)$(NAME)$(NONE) ready!"
 
 run: all
 	@./$(NAME)
 
-debug: info compile_libft 
-	@$(CC) $(HEADER_INC) $(HEADER_INC_LIBFT) $(SRCS) -o $(NAME) $(READLINE) $(LIBFT) -g3  
-	@echo "\t\t[ $(GREEN)✓$(NONE) ] $(GREEN)$(NAME)$(NONE) for GDB ready!"
-
-$(OBJS_DIR)%.o: $(SRCS_DIR)%.c $(HEADER)
+$(OBJS_DIR)%.o: $(SRCS_DIR)%.c 
 	@mkdir -p $(OBJS_DIR)
-	@$(CC) $(CFLAGS) $(HEADER_INC) $(HEADER_INC_LIBFT) -c $< -o $@
+	@$(CC) $(CFLAGS) $(HEADER_INC) $(HEADER_INC_LIBFT) -o $@ -c $<
 
 clean:
 	@rm -rf $(OBJS_DIR)
@@ -106,16 +99,15 @@ clean:
 fclean: clean
 	@make --no-print-directory fclean -C ./libft
 	@rm -f $(NAME)
-	@rm -rf gmon.out
 	@echo "\t\t[ $(GREEN)✓$(NONE) ] Project $(GREEN)$(NAME)$(NONE) clean"
 
 re: fclean all
 
-.PHONY: all clean fclean re info header
+.PHONY: all clean fclean re header
 
+-include ${DEPS}
 
-
-info: header
+.SECONDARY: ${OBJS_DIR} ${OBJS} ${OBJ}
 
 define HEADER 
 

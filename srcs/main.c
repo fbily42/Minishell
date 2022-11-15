@@ -6,22 +6,11 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 14:01:41 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/15 15:00:14 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/15 17:13:00 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*
-TODO FLO :
-
-	EXPORT	=> Gerer nom variable env qui doit uniquement contenir : A-z / 0-9 / _
-			=> Error malloc dans swap_string ? Voir avec Simon methode opti..
-			
-	UNSET	=> Aucun message d'erreur en E3 sur "unset ++++++++" ?????
-	
-	CD		=> Norminette... +25 lignes sur fonction CD(built_in.c) (T_T)
-*/
 
 int	g_minishell_exit;
 
@@ -39,6 +28,7 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	}
 	g_minishell_exit = 0;
+	ctx.f_export = 0;
 	if (*envp)
 		ctx.envp = copy_env(envp);
 	else
@@ -91,7 +81,7 @@ char	**handle_mini_envp(t_context *ctx)
 		ft_putstr_fd("Error malloc\n", STDERR_FILENO);
 		exit(EXIT_FAILURE);
 	}
-	ctx->envp = export(ctx->envp, pwd);
+	ctx->envp = export(ctx->envp, pwd, ctx);
 	if (!*ctx->envp)
 	{
 		ft_putstr_fd("Error malloc\n", STDERR_FILENO);

@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 21:15:11 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/15 14:39:23 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/15 16:31:58 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,43 @@ void	check_arg_exit(t_context *ctx, char *str)
 		}
 		i++;
 	}
+}
+
+static void	print_error_cd(t_context *ctx, char *oldpwd, char *path)
+{
+	if (ctx->error != NULL)
+		free(ctx->error);
+	ctx->error = ft_strjoin("PopCornShell: ", "cd: ");
+	ctx->error = strjoin_and_free_s1(ctx->error, path);
+	if (!ctx->error)
+		error_malloc(ctx);
+	perror(ctx->error);
+	free(oldpwd);
+	free(ctx->error);
+	ctx->error = NULL;
+}
+
+bool	cd(t_context *ctx, char	*path)
+{
+	char	dir[PATH_MAX];
+	char	*oldpwd;
+	char	*pwd;
+
+	if (getcwd(dir, sizeof(dir)) == NULL)
+		perror("Getcwd ");
+	oldpwd = ft_strjoin("OLDPWD=", dir);
+	if (!oldpwd)
+		error_malloc(ctx);
+	ctx->envp = export(ctx->envp, oldpwd, ctx);
+	if (chdir(path) == -1)
+		return (print_error_cd(ctx, oldpwd, path), false);
+	free(oldpwd);
+	if (getcwd(dir, sizeof(dir)) == NULL)
+		perror("Getcwd ");
+	pwd = ft_strjoin("PWD=", dir);
+	if (!pwd)
+		error_malloc(ctx);
+	ctx->envp = export(ctx->envp, pwd, ctx);
+	free(pwd);
+	return (true);
 }

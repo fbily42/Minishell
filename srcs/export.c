@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 17:27:05 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/13 21:10:48 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/15 16:22:04 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,15 +68,44 @@ static char	**update_var(char **envp, char *var, char *to_find)
 	return (envp);
 }
 
-char	**export(char **envp, char *var)
+static bool	check_name_export(t_context *ctx, char *var, int i)
+{
+	ctx->error = ft_strjoin("PopCornShell: export: ", var);
+	ctx->error = strjoin_and_free_s1(ctx->error, ": not a valid indetifier\n");
+	if (!ctx->error)
+		error_malloc(ctx);
+	while (var[i])
+	{
+		if (var[0] != '=' && (ft_isalnum(var[i]) == 1
+				|| var[i] == '_' ))
+			i++;
+		else if (var[i] == '=' && i > 0)
+			break ;
+		else
+		{
+			ft_putstr_fd(ctx->error, STDERR_FILENO);
+			free(ctx->error);
+			ctx->error = NULL;
+			ctx->f_export += 1;
+			return (false);
+		}
+	}
+	free(ctx->error);
+	ctx->error = NULL;
+	return (true);
+}
+
+char	**export(char **envp, char *var, t_context *ctx)
 {
 	char	**new_env;
 	char	*to_find;
 
 	new_env = NULL;
+	if (check_name_export(ctx, var, 0) == false)
+		return (envp);
 	to_find = find_var(var);
 	if (!to_find)
-		return (NULL);
+		error_malloc(ctx);
 	if (check_var_name(var) == false)
 		return (envp);
 	if (!*envp)
@@ -88,6 +117,7 @@ char	**export(char **envp, char *var)
 		envp = update_var(envp, var, to_find);
 		return (envp);
 	}
+	free(to_find);
 	free_2d(envp);
 	return (new_env);
 }

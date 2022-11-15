@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 20:35:31 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/14 22:24:42 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/15 15:58:54 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,11 +88,11 @@ bool			execute_cd(t_node *tree, t_context *ctx);
 bool			is_built_in(t_node *tree);
 
 /**************		UNSET.C		**************/
-char			**unset(char **envp, char *var);
+char			**unset(char **envp, char *var, t_context *ctx);
 
 /**************		EXPORT.C		**************/
 void			sort_and_print_env(t_context *ctx);
-char			**export(char **envp, char *var);
+char			**export(char **envp, char *var, t_context *ctx);
 
 /**************		BUILT_IN_UTILS.C		**************/
 bool			is_in_env(char	**envp, char *var);

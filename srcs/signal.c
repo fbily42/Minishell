@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/26 13:42:23 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/12 14:17:51 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/15 16:55:26 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,15 +65,5 @@ void	init_signal(void)
 	sa_quit.sa_sigaction = &handler_quit_child;
 	sa_quit.sa_flags = SA_SIGINFO;
 	sigaction(SIGINT, &sa_int, NULL);
-	sigaction(SIGQUIT, &sa_quit, NULL);
-}
-
-void	init_signal_child(void)
-{
-	struct sigaction	sa_quit;
-
-	sa_quit = (struct sigaction){0};
-	sa_quit.sa_sigaction = &handler_quit_child;
-	sa_quit.sa_flags = SA_SIGINFO;
 	sigaction(SIGQUIT, &sa_quit, NULL);
 }

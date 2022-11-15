@@ -6,16 +6,12 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 17:06:40 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/11 21:04:00 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/15 16:52:33 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*
-Call ft_strjoin and free *s1
-Same return as ft_strjoin.
-*/
 char	*strjoin_and_free_s1(char *s1, char *s2)
 {
 	char	*back;
@@ -27,10 +23,6 @@ char	*strjoin_and_free_s1(char *s1, char *s2)
 	return (back);
 }
 
-/*
-Call ft_strjoin and free *s2
-Same return as ft_strjoin.
-*/
 char	*strjoin_and_free_s2(char *s1, char *s2)
 {
 	char	*back;

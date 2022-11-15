@@ -6,11 +6,22 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 20:39:42 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/14 22:24:23 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/15 16:50:20 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	heredoc_error(char *heredoc, int fd[2], t_context *ctx)
+{
+	if (heredoc == NULL)
+		ft_putstr_fd(ctx->error, STDERR_FILENO);
+	free(ctx->error);
+	ctx->error = NULL;
+	close(fd[1]);
+	free(heredoc);
+	return (fd[0]);
+}
 
 int	heredoc(t_node	*node, t_context *ctx)
 {
@@ -23,32 +34,20 @@ int	heredoc(t_node	*node, t_context *ctx)
 			node->data.r.file);
 	ctx->error = strjoin_and_free_s1(ctx->error, "\n");
 	if (!ctx->error)
-		return (-1);
+		error_malloc(ctx);
 	while (1)
 	{
 		heredoc = readline("> ");
 		if (heredoc == NULL || ft_strcmp(heredoc, node->data.r.file) == 0)
-		{
-			if (heredoc == NULL)
-				ft_putstr_fd(ctx->error, STDERR_FILENO);
-			free(ctx->error);
-			ctx->error = NULL;
-			close(fd[1]);
-			return (fd[0]);
-		}
+			return (heredoc_error(heredoc, fd, ctx));
 		heredoc = word_expansion(&heredoc, ctx);
+		if (!heredoc)
+			return (-1);
 		ft_putendl_fd(heredoc, fd[1]);
 		free(heredoc);
 	}
 }
 
-/* 
-Find the line "PATH=" in (char **)envp
-Split every paths between " : "
-Call create_paths
-Return : TRUE if everything is OK
-Return : FALSE if something wrong happened.
-*/
 bool	find_paths(t_context *ctx)
 {
 	char	*path;
@@ -78,11 +77,6 @@ bool	find_paths(t_context *ctx)
 	return (true);
 }
 
-/* 
-Create every paths and store them in (char **)ctx.my_paths
-Return : TRUE if everything is OK
-Return : FALSE if something wrong happened.
-*/
 bool	create_paths(t_context *ctx)
 {
 	int	i;

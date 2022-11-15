@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 20:24:25 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/13 22:40:31 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/15 16:13:02 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,38 +92,4 @@ void	env(char **envp, int fd)
 		ft_putstr_fd(envp[i++], fd);
 		write(fd, "\n", 1);
 	}
-}
-
-bool	cd(t_context *ctx, char	*path)
-{
-	char	dir[PATH_MAX];
-	char	*oldpwd;
-	char	*pwd;
-
-	ctx->error = ft_strjoin("PopCornShell: ", "cd: ");
-	ctx->error = strjoin_and_free_s1(ctx->error, path);
-	if (getcwd(dir, sizeof(dir)) == NULL)
-		perror("Getcwd ");
-	oldpwd = ft_strjoin("OLDPWD=", dir);
-	if (!oldpwd || !ctx->error)
-		error_malloc(ctx);
-	ctx->envp = export(ctx->envp, oldpwd);
-	if (chdir(path) == -1)
-	{
-		perror(ctx->error);
-		free(oldpwd);
-		free(ctx->error);
-		ctx->error = NULL;
-		return (false);
-	}
-	free(oldpwd);
-	if (getcwd(dir, sizeof(dir)) == NULL)
-		perror("Getcwd ");
-	pwd = ft_strjoin("PWD=", dir);
-	if (!pwd)
-		error_malloc(ctx);
-	ctx->envp = export(ctx->envp, pwd);
-	free(ctx->error);
-	ctx->error = NULL;
-	return (true);
 }
