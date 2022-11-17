@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/26 13:09:03 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/15 18:16:39 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/16 17:16:15 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	syntax_error_pipe(void)
 int	error_token(t_token **token, char **itr)
 {
 	if (!has_next(*itr))
-		return (syntax_error_newline());
+		return (syntax_error_newline(), free(*token), 2);
 	if (is_symbol(*itr) == PIPE)
 		return (free(*token), syntax_error_pipe());
 	if (itr_is_redirection(*itr))

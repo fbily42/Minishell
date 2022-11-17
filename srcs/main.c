@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 14:01:41 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/15 18:17:01 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/16 17:11:35 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	main(int argc, char **argv, char **envp)
 	init_signal();
 	minishell(tree, &ctx);
 	free_2d(ctx.envp);
+	rl_clear_history();
 	return (g_minishell_exit);
 }
 
@@ -67,7 +68,7 @@ char	**handle_mini_envp(t_context *ctx)
 	char	*pwd;
 
 	ctx->envp = malloc(sizeof(char *));
-	if (!*ctx->envp)
+	if (!ctx->envp)
 	{
 		ft_putstr_fd("Error malloc\n", STDERR_FILENO);
 		exit(EXIT_FAILURE);

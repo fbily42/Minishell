@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 20:24:25 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/15 16:13:02 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/16 16:05:04 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	pwd(int fd)
 	char	dir[PATH_MAX];
 
 	if (getcwd(dir, sizeof(dir)) == NULL)
-		perror("Getcwd ");
+		perror("PopCornShell: pwd");
 	else
 	{
 		ft_putstr_fd(dir, fd);

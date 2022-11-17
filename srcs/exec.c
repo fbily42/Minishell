@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 20:37:52 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/15 17:53:33 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/16 17:05:02 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,12 +116,16 @@ int	exec_cmd(t_node *tree, t_context *ctx, int *p_int)
 
 void	child(t_node *tree, t_context *ctx)
 {
-	dup2(ctx->pipe[STDIN_FILENO], STDIN_FILENO);
 	if (ctx->pipe[STDIN_FILENO] > 2)
+	{
+		dup2(ctx->pipe[STDIN_FILENO], STDIN_FILENO);
 		close(ctx->pipe[STDIN_FILENO]);
-	dup2(ctx->pipe[STDOUT_FILENO], STDOUT_FILENO);
+	}
 	if (ctx->pipe[STDOUT_FILENO] > 2)
+	{
+		dup2(ctx->pipe[STDOUT_FILENO], STDOUT_FILENO);
 		close(ctx->pipe[STDOUT_FILENO]);
+	}
 	if (ctx->fd_to_close != -1)
 		close(ctx->fd_to_close);
 	if (is_built_in(tree) == true)

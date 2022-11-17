@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_error_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 17:06:40 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/15 16:52:33 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/16 17:10:24 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,9 @@ void	error_malloc(t_context *ctx)
 		close(ctx->pipe[STDIN_FILENO]);
 	if (ctx->pipe[STDOUT_FILENO] > 2)
 		close(ctx->pipe[STDOUT_FILENO]);
+	close(STDOUT_FILENO);
+	close(STDIN_FILENO);
+	close(STDERR_FILENO);
 	exit(EXIT_FAILURE);
 }
 
@@ -68,5 +71,8 @@ void	exit_and_clean(t_context *ctx, unsigned char code)
 		close(ctx->pipe[STDIN_FILENO]);
 	if (ctx->pipe[STDOUT_FILENO] > 2)
 		close(ctx->pipe[STDOUT_FILENO]);
+	close(STDOUT_FILENO);
+	close(STDIN_FILENO);
+	close(STDERR_FILENO);
 	exit(code);
 }

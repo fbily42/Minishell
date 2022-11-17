@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_in_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 21:15:11 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/15 21:06:02 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/16 16:11:17 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,20 @@ static void	print_error_cd(t_context *ctx, char *oldpwd, char *path)
 	ctx->error = NULL;
 }
 
+static void	update_pwd(t_context *ctx, char *pwd)
+{
+	char	dir[PATH_MAX];
+
+	if (getcwd(dir, sizeof(dir)) != NULL)
+	{
+		pwd = ft_strjoin("PWD=", dir);
+		if (!pwd)
+			error_malloc(ctx);
+		ctx->envp = export(ctx->envp, pwd, ctx);
+		free(pwd);
+	}
+}
+
 bool	cd(t_context *ctx, char	*path)
 {
 	char	dir[PATH_MAX];
@@ -86,6 +100,7 @@ bool	cd(t_context *ctx, char	*path)
 	char	*pwd;
 
 	oldpwd = NULL;
+	pwd = NULL;
 	if (getcwd(dir, sizeof(dir)) != NULL)
 	{
 		oldpwd = ft_strjoin("OLDPWD=", dir);
@@ -99,13 +114,6 @@ bool	cd(t_context *ctx, char	*path)
 		ctx->envp = export(ctx->envp, oldpwd, ctx);
 		free(oldpwd);
 	}
-	if (getcwd(dir, sizeof(dir)) != NULL)
-	{
-		pwd = ft_strjoin("PWD=", dir);
-		if (!pwd)
-			error_malloc(ctx);
-		ctx->envp = export(ctx->envp, pwd, ctx);
-		free(pwd);
-	}
+	update_pwd(ctx, pwd);
 	return (true);
 }
