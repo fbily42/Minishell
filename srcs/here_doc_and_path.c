@@ -6,11 +6,12 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 20:39:42 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/15 16:50:20 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/17 15:26:54 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 
 int	heredoc_error(char *heredoc, int fd[2], t_context *ctx)
 {
@@ -46,6 +47,7 @@ int	heredoc(t_node	*node, t_context *ctx)
 		ft_putendl_fd(heredoc, fd[1]);
 		free(heredoc);
 	}
+	return (-1);
 }
 
 bool	find_paths(t_context *ctx)
