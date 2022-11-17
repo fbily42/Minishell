@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 11:03:15 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/17 12:14:25 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/17 13:33:12 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static int	token_var_exist(char *str, char **envp, int len)
 {
 	int	i;
+	char	*pstr;
 
 	i = -1;
 	if (!*envp)
@@ -25,12 +26,15 @@ static int	token_var_exist(char *str, char **envp, int len)
 		return (1);
 	len--;
 	str++;
+	pstr = ft_strndup(str, len);
+	if (!pstr)
+		return (0);
 	while (envp[++i])
 	{
-		if (ft_strncmp(envp[i], str, len) == 0)
-			return (1);
+		if (ft_strcmp(envp[i], pstr) == 0)
+			return (free(pstr), 1);
 	}
-	return (0);
+	return (free(pstr), 0);
 }
 
 int	is_single_dollar(t_token *token)
