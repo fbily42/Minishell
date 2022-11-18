@@ -6,13 +6,13 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 15:45:32 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/15 09:22:18 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/18 13:40:38 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern int	g_minishell_exit;
+extern int	g_minishell_exit[2];
 
 int	dollar_inside(char *str)
 {
@@ -80,7 +80,7 @@ void	we_create_word_utils(char **tab, int i, t_context *ctx, int tab_len)
 	if (tab[i][0] == '$' && tab[i][1] == '?')
 	{
 		free(tab[i]);
-		tab[i] = ft_itoa(g_minishell_exit);
+		tab[i] = ft_itoa(g_minishell_exit[0]);
 	}
 	else if (tab[i][0] == '$' && tab[i][1] != '\0')
 	{

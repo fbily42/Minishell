@@ -6,13 +6,13 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 20:37:52 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/16 17:05:02 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/18 13:43:00 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-extern int	g_minishell_exit;
+extern int	g_minishell_exit[2];
 
 void	exec(t_node *tree, t_context *ctx)
 {
@@ -28,15 +28,15 @@ void	exec(t_node *tree, t_context *ctx)
 			if (info.pids[info.i] > 0)
 				waitpid(info.pids[info.i], &info.status, 0);
 		}
-		if (g_minishell_exit < 128)
+		if (g_minishell_exit[0] < 128)
 		{
 			if (WIFEXITED(info.status))
-					g_minishell_exit = WEXITSTATUS(info.status);
+					g_minishell_exit[0] = WEXITSTATUS(info.status);
 			else if (WIFSIGNALED(info.status))
-					g_minishell_exit = WTERMSIG(info.status) + 128;
+					g_minishell_exit[0] = WTERMSIG(info.status) + 128;
 		}
 		if (info.pids[ctx->nb_cmd - 1] == -1)
-			g_minishell_exit = 1;
+			g_minishell_exit[0] = 1;
 	}
 	clean_struct(ctx);
 }
@@ -51,7 +51,7 @@ int	exec_node(t_node *tree, t_context *ctx, int *p_int)
 		{
 			if (update_redir(tree->data.b.right, ctx) == false)
 			{
-				g_minishell_exit = 1;
+				g_minishell_exit[0] = 1;
 				*p_int = -1;
 				ft_close(ctx);
 				return (0);
@@ -96,9 +96,9 @@ int	exec_cmd(t_node *tree, t_context *ctx, int *p_int)
 	if (ctx->nb_cmd == 1 && is_built_in(tree) == true)
 	{
 		if (exec_built_in(tree, ctx, ctx->pipe[STDOUT_FILENO]) == true)
-			g_minishell_exit = 0;
+			g_minishell_exit[0] = 0;
 		else
-			g_minishell_exit = 1;
+			g_minishell_exit[0] = 1;
 		ft_close(ctx);
 		return (0);
 	}

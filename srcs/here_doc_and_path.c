@@ -6,24 +6,24 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 20:39:42 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/18 13:24:31 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/18 14:01:42 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern int g_minishell_heredoc;
+extern int	g_minishell_exit[2];
 
 int	heredoc_error(char *heredoc, int fd[2], t_context *ctx, int tmp)
 {
-	if (g_minishell_heredoc == 1)
+	if (g_minishell_exit[1] == 1)
 	{
 		dup2(tmp, STDIN_FILENO);
 		close(tmp);
 		free(ctx->error);
 		ctx->error = NULL;
 		free(heredoc);
-		g_minishell_heredoc = 0;
+		g_minishell_exit[1] = 0;
 		return (-2);
 	}
 	if (heredoc == NULL)
@@ -32,7 +32,7 @@ int	heredoc_error(char *heredoc, int fd[2], t_context *ctx, int tmp)
 	ctx->error = NULL;
 	close(fd[1]);
 	free(heredoc);
-	g_minishell_heredoc = 0;
+	g_minishell_exit[1] = 0;
 	return (fd[0]);
 }
 
@@ -49,7 +49,7 @@ int	heredoc(t_node	*node, t_context *ctx)
 	ctx->error = strjoin_and_free_s1(ctx->error, "\n");
 	if (!ctx->error)
 		error_malloc(ctx);
-	g_minishell_heredoc = 2;
+	g_minishell_exit[1] = 2;
 	tmp = dup(STDIN_FILENO);
 	while (1)
 	{

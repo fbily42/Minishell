@@ -6,13 +6,11 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 10:01:49 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/15 09:22:09 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/18 13:40:15 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-extern int	g_minishell_exit;
 
 char	*extract_delimiter(t_token **token, t_context *ctx)
 {

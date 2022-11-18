@@ -6,18 +6,18 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/26 13:09:03 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/16 17:16:15 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/18 13:41:36 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern int	g_minishell_exit;
+extern int	g_minishell_exit[2];
 
 int	print_error_token(void)
 {
 	ft_putstr_fd("PopCornShell: syntax error, unclosed quote\n", 2);
-	g_minishell_exit = 2;
+	g_minishell_exit[0] = 2;
 	return (1);
 }
 
@@ -25,7 +25,7 @@ int	syntax_error_newline(void)
 {
 	ft_putstr_fd("PopCornShell: syntax error near unexpected token `newline'\n"\
 		, 2);
-	g_minishell_exit = 2;
+	g_minishell_exit[0] = 2;
 	return (2);
 }
 
@@ -43,14 +43,14 @@ int	syntax_error_redir_token(char **itr)
 	else if (peek(*itr) == '<')
 		ft_putstr_fd("PopCornShell: syntax error near unexpected token `<'\n" \
 			, 2);
-	g_minishell_exit = 2;
+	g_minishell_exit[0] = 2;
 	return (2);
 }
 
 int	syntax_error_pipe(void)
 {
 	ft_putstr_fd("PopcornShell: syntax error near unexpected token `|'\n", 2);
-	g_minishell_exit = 2;
+	g_minishell_exit[0] = 2;
 	return (2);
 }
 

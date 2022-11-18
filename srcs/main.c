@@ -6,14 +6,13 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 14:01:41 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/18 09:22:49 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/18 14:01:16 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	g_minishell_exit;
-int g_minishell_heredoc;
+int	g_minishell_exit[2];
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -23,13 +22,13 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	tree = NULL;
-	g_minishell_heredoc = 0;
+	g_minishell_exit[1] = 0;
 	if (isatty(STDIN_FILENO) == 0)
 	{
 		perror("PopCornShell ");
 		return (1);
 	}
-	g_minishell_exit = 0;
+	g_minishell_exit[0] = 0;
 	ctx.f_export = 0;
 	if (*envp)
 		ctx.envp = copy_env(envp);
@@ -39,7 +38,7 @@ int	main(int argc, char **argv, char **envp)
 	minishell(tree, &ctx);
 	free_2d(ctx.envp);
 	rl_clear_history();
-	return (g_minishell_exit);
+	return (g_minishell_exit[0]);
 }
 
 void	minishell(t_node *tree, t_context *ctx)

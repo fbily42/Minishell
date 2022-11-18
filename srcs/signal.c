@@ -6,24 +6,24 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/26 13:42:23 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/18 13:08:33 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/18 13:45:41 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <sys/ioctl.h>
 
-extern int	g_minishell_exit;
-extern int g_minishell_heredoc;
+extern int	g_minishell_exit[2];
 
 void	handle_sigint(int signum, siginfo_t *info, void *i)
 {
 	(void)i;
 	if (signum == SIGINT)
 	{
-		if (g_minishell_heredoc == 2)
+		if (g_minishell_exit[1] == 2)
 		{
-			g_minishell_heredoc = 1;
+			g_minishell_exit[1] = 1;
+			g_minishell_exit[0] = 130;
 			close(STDIN_FILENO);
 		}
 		if (info->si_pid > 0)
@@ -32,12 +32,12 @@ void	handle_sigint(int signum, siginfo_t *info, void *i)
 			write(1, "\n", 1);
 			rl_on_new_line();
 			rl_redisplay();
-			g_minishell_exit = 130;
+			g_minishell_exit[0] = 130;
 		}
 		else if (info->si_pid == 0)
 		{
 			write(1, "\n", 1);
-			g_minishell_exit = 130;
+			g_minishell_exit[0] = 130;
 		}
 	}
 }
@@ -50,7 +50,7 @@ void	handler_quit_child(int signum, siginfo_t *info, void *i)
 		if (info->si_pid == 0)
 		{
 			ft_putstr_fd("Quit (core dumped)\n", STDOUT_FILENO);
-			g_minishell_exit = 131;
+			g_minishell_exit[0] = 131;
 		}
 		else
 		{
