@@ -6,11 +6,12 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/26 13:42:23 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/17 15:26:51 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/18 12:19:26 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <sys/ioctl.h>
 
 extern int	g_minishell_exit;
 

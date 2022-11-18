@@ -6,12 +6,11 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 20:39:42 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/17 15:26:54 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/18 12:19:46 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 int	heredoc_error(char *heredoc, int fd[2], t_context *ctx)
 {

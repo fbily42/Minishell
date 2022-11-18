@@ -6,13 +6,14 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 14:01:41 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/17 15:26:57 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/18 09:22:49 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int	g_minishell_exit;
+int g_minishell_heredoc;
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -22,6 +23,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	tree = NULL;
+	g_minishell_heredoc = 0;
 	if (isatty(STDIN_FILENO) == 0)
 	{
 		perror("PopCornShell ");
