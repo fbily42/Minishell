@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 20:37:52 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/18 13:43:00 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/18 17:23:12 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void	exec(t_node *tree, t_context *ctx)
 {
 	t_info		info;
 
+	if (tree == NULL)
+		return ;
 	if (init_exec(tree, ctx, &info) == false)
 		error_malloc(ctx);
 	info.child_count = exec_node(tree, ctx, info.p_int);
@@ -60,12 +62,14 @@ int	exec_node(t_node *tree, t_context *ctx, int *p_int)
 		if (tree->data.b.left)
 			return (exec_cmd(tree->data.b.left, ctx, p_int));
 		else
+		{
+			*p_int = 0;
 			return (0);
+		}
 	}
 	else if (tree->type == PIPE)
 		return (exec_pipe(tree, ctx, p_int));
-	else
-		return (0);
+	return (0);
 }
 
 int	exec_pipe(t_node *tree, t_context *ctx, int *p_int)

@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 11:03:15 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/18 14:02:03 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/18 16:55:05 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ t_token	*token_symbol(char **itr)
 	else if (is_symbol(*itr) == PIPE)
 	{
 		token = token_single_symbol(itr);
-		if (!has_next(*itr))
+		if (!has_next(*itr) || readline_is_empty(*itr + 1))
 			return (syntax_error_pipe(), free(token), NULL);
 	}
 	if (!token)

@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/20 07:43:20 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/10 13:18:56 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/18 17:04:47 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ t_node	*init_redir(t_token **token, t_context *ctx)
 		assign_redir(&node, token, ctx);
 	else
 		return (free(node), NULL);
+	if (node->data.r.fd == -2)
+		return (free(node->data.r.file), free(node), NULL);
 	return (node);
 }
 
@@ -86,5 +88,8 @@ void	assign_redir(t_node **node, t_token **token, t_context *ctx)
 	else if ((*node)->type == APPEND)
 		(*node)->data.r.file = extract_word(token, 1, ctx);
 	else if ((*node)->type == HEREDOC)
+	{
 		(*node)->data.r.file = extract_delimiter(token, ctx);
+		(*node)->data.r.fd = heredoc(*node, ctx);
+	}
 }

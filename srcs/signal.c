@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/26 13:42:23 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/18 13:45:41 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/18 16:44:37 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,10 @@ void	handle_sigint(int signum, siginfo_t *info, void *i)
 		{
 			g_minishell_exit[1] = 1;
 			g_minishell_exit[0] = 130;
+			write(1, "\n", 1);
 			close(STDIN_FILENO);
 		}
-		if (info->si_pid > 0)
+		else if (info->si_pid > 0)
 		{
 			rl_replace_line("", 0);
 			write(1, "\n", 1);

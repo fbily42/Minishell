@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 17:07:59 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/18 13:14:11 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/18 17:23:45 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,7 @@ bool	redir_in(t_node *tree, t_context *ctx)
 	{
 		if (ctx->pipe[STDIN_FILENO] > 2)
 			close(ctx->pipe[STDIN_FILENO]);
-		ctx->pipe[STDIN_FILENO] = heredoc(tree->data.b.left, ctx);
-		if (ctx->pipe[STDIN_FILENO] == -1)
-		{
-			ft_putstr_fd("Problem occured with here_doc\n", STDERR_FILENO);
-			return (false);
-		}
-		else if (ctx->pipe[STDIN_FILENO] == -2)
-			return (false);
+		ctx->pipe[STDIN_FILENO] = tree->data.b.left->data.r.fd;
 	}
 	return (true);
 }

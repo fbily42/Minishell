@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 16:24:06 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/10 13:18:11 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/18 17:03:59 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ t_node	*node_redirection(t_token **token, t_context *ctx)
 		return (NULL);
 	node->type = REDIR;
 	node->data.b.left = init_redir(token, ctx);
+	if (!node->data.b.left)
+		return (free(node), NULL);
 	if (*token && is_redirection_token(*token))
 	{
 		node->data.b.right = node_arg(token, ctx);
