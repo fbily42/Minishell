@@ -6,26 +6,40 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 20:39:42 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/18 12:19:46 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/18 13:24:31 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	heredoc_error(char *heredoc, int fd[2], t_context *ctx)
+extern int g_minishell_heredoc;
+
+int	heredoc_error(char *heredoc, int fd[2], t_context *ctx, int tmp)
 {
+	if (g_minishell_heredoc == 1)
+	{
+		dup2(tmp, STDIN_FILENO);
+		close(tmp);
+		free(ctx->error);
+		ctx->error = NULL;
+		free(heredoc);
+		g_minishell_heredoc = 0;
+		return (-2);
+	}
 	if (heredoc == NULL)
 		ft_putstr_fd(ctx->error, STDERR_FILENO);
 	free(ctx->error);
 	ctx->error = NULL;
 	close(fd[1]);
 	free(heredoc);
+	g_minishell_heredoc = 0;
 	return (fd[0]);
 }
 
 int	heredoc(t_node	*node, t_context *ctx)
 {
 	int		fd[2];
+	int		tmp;
 	char	*heredoc;
 
 	if (pipe(fd) == -1)
@@ -35,11 +49,13 @@ int	heredoc(t_node	*node, t_context *ctx)
 	ctx->error = strjoin_and_free_s1(ctx->error, "\n");
 	if (!ctx->error)
 		error_malloc(ctx);
+	g_minishell_heredoc = 2;
+	tmp = dup(STDIN_FILENO);
 	while (1)
 	{
 		heredoc = readline("> ");
 		if (heredoc == NULL || ft_strcmp(heredoc, node->data.r.file) == 0)
-			return (heredoc_error(heredoc, fd, ctx));
+			return (heredoc_error(heredoc, fd, ctx, tmp));
 		heredoc = word_expansion(&heredoc, ctx);
 		if (!heredoc)
 			return (-1);

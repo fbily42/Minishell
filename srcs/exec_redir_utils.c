@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redir_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 17:07:59 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/14 21:40:56 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/18 13:14:11 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ bool	redir_in(t_node *tree, t_context *ctx)
 			ft_putstr_fd("Problem occured with here_doc\n", STDERR_FILENO);
 			return (false);
 		}
+		else if (ctx->pipe[STDIN_FILENO] == -2)
+			return (false);
 	}
 	return (true);
 }

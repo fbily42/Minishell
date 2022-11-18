@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/26 13:42:23 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/18 12:19:26 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/18 13:08:33 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,18 @@
 #include <sys/ioctl.h>
 
 extern int	g_minishell_exit;
+extern int g_minishell_heredoc;
 
 void	handle_sigint(int signum, siginfo_t *info, void *i)
 {
 	(void)i;
 	if (signum == SIGINT)
 	{
+		if (g_minishell_heredoc == 2)
+		{
+			g_minishell_heredoc = 1;
+			close(STDIN_FILENO);
+		}
 		if (info->si_pid > 0)
 		{
 			rl_replace_line("", 0);
