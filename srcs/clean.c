@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 09:10:19 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/06 19:24:19 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/18 15:39:10 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ void	clean_tree(t_node **tree)
 			(*tree)->type == REDIROUT || (*tree)->type == HEREDOC)
 	{
 		free((*tree)->data.r.file);
+		if ((*tree)->type == HEREDOC)
+			close((*tree)->data.r.fd);
 		free(*tree);
 		return ;
 	}

@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 20:39:42 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/18 14:01:42 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/18 15:41:49 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	heredoc_error(char *heredoc, int fd[2], t_context *ctx, int tmp)
 	free(ctx->error);
 	ctx->error = NULL;
 	close(fd[1]);
+	close(tmp);
 	free(heredoc);
 	g_minishell_exit[1] = 0;
 	return (fd[0]);
