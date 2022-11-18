@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 20:37:52 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/18 17:23:12 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/18 23:29:20 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,22 +24,7 @@ void	exec(t_node *tree, t_context *ctx)
 		error_malloc(ctx);
 	info.child_count = exec_node(tree, ctx, info.p_int);
 	if (info.child_count != 0)
-	{
-		while (++info.i < ctx->nb_cmd)
-		{
-			if (info.pids[info.i] > 0)
-				waitpid(info.pids[info.i], &info.status, 0);
-		}
-		if (g_minishell_exit[0] < 128)
-		{
-			if (WIFEXITED(info.status))
-					g_minishell_exit[0] = WEXITSTATUS(info.status);
-			else if (WIFSIGNALED(info.status))
-					g_minishell_exit[0] = WTERMSIG(info.status) + 128;
-		}
-		if (info.pids[ctx->nb_cmd - 1] == -1)
-			g_minishell_exit[0] = 1;
-	}
+		wait_exit_code(ctx, info);
 	clean_struct(ctx);
 }
 
@@ -63,7 +48,7 @@ int	exec_node(t_node *tree, t_context *ctx, int *p_int)
 			return (exec_cmd(tree->data.b.left, ctx, p_int));
 		else
 		{
-			*p_int = 0;
+			*p_int = -2;
 			return (0);
 		}
 	}
@@ -79,7 +64,11 @@ int	exec_pipe(t_node *tree, t_context *ctx, int *p_int)
 	int			p[2];
 	int			childs;
 
-	pipe(p);
+	if (pipe(p) == -1)
+	{
+		perror("pipe");
+		exit_and_clean(ctx, EXIT_FAILURE);
+	}
 	childs = 0;
 	lhs_ctx = *ctx;
 	lhs_ctx.pipe[STDOUT_FILENO] = p[STDOUT_FILENO];

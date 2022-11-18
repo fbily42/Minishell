@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 20:35:31 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/15 20:46:49 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/18 23:30:56 by fbily            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@ int				exec_node(t_node *tree, t_context *ctx, int *p_int);
 int				exec_cmd(t_node *tree, t_context *ctx, int *p_int);
 void			child(t_node *tree, t_context *ctx);
 void			exec(t_node *tree, t_context *ctx);
+
+/**************		WAIT.C		**************/
+void			wait_exit_code(t_context *ctx, t_info info);
 
 /**************		EXEC_REDIR_UTILS.C		**************/
 bool			open_file_out(t_context *ctx, t_node *tree, bool flag);
