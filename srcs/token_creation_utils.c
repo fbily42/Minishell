@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 12:13:38 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/15 09:22:01 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/19 14:45:10 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,14 +83,20 @@ int	var_len(char *str)
 	int	i;
 
 	i = -1;
-	while (str[++i])
+	if (str[++i] == '$')
+		i++;
+	while (str[i] && str[++i])
 	{
+		if (ft_isalpha(str[i]) == 0 && str[i] != '_')
+			return (i);
+		/*
 		if (is_whitespace(str[i]))
 			return (i);
 		if (str[i] == '/')
 			return (i);
 		if (str[i] == '=')
 			return (i);
+			*/
 	}
 	return (i);
 }

@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/12 14:01:41 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/18 14:01:16 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/19 13:35:31 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,13 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	tree = NULL;
 	g_minishell_exit[1] = 0;
+	/*
 	if (isatty(STDIN_FILENO) == 0)
 	{
 		perror("PopCornShell ");
 		return (1);
 	}
+	*/
 	g_minishell_exit[0] = 0;
 	ctx.f_export = 0;
 	if (*envp)
@@ -58,6 +60,7 @@ void	minishell(t_node *tree, t_context *ctx)
 			add_history(line);
 		tree = parsing(line, ctx);
 		exec(tree, ctx);
+		printf("\033[0;32mExit_Code:[%d]\n\n\033[0m", g_minishell_exit[0]);
 		clean_tree(&tree);
 		free(line);
 	}

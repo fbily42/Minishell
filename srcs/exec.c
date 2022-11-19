@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 20:37:52 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/18 23:29:20 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/19 14:55:14 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	exec(t_node *tree, t_context *ctx)
 {
 	t_info		info;
 
+	g_minishell_exit[0] = 0;
 	if (tree == NULL)
 		return ;
 	if (init_exec(tree, ctx, &info) == false)

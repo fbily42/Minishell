@@ -6,7 +6,7 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 11:03:15 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/18 16:55:05 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/19 14:48:31 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,14 @@ static int	token_var_exist(char *str, char **envp, int len)
 		return (1);
 	len--;
 	str++;
+	if (ft_isdigit(*str) || *str == '=')
+		return (1);
 	pstr = ft_strndup(str, len);
 	if (!pstr)
 		return (0);
 	while (envp[++i])
 	{
-		if (ft_strcmp(envp[i], pstr) == 0)
+		if (ft_strncmp(pstr, envp[i], len) == 0 && envp[i][len] == '=')
 			return (free(pstr), 1);
 	}
 	return (free(pstr), 0);
