@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 20:37:52 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/19 14:55:14 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/20 18:14:22 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ void	exec(t_node *tree, t_context *ctx)
 {
 	t_info		info;
 
-	g_minishell_exit[0] = 0;
 	if (tree == NULL)
 		return ;
+	g_minishell_exit[0] = 0;
 	if (init_exec(tree, ctx, &info) == false)
 		error_malloc(ctx);
 	info.child_count = exec_node(tree, ctx, info.p_int);
