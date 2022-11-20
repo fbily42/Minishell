@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 20:38:13 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/15 17:10:13 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/20 18:55:24 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,12 @@ char	**unset(char **envp, char *var, t_context *ctx)
 	free(ctx->error);
 	ctx->error = NULL;
 	return (new_env);
+}
+
+void	export_not_valid(t_context *ctx)
+{
+	ft_putstr_fd(ctx->error, STDERR_FILENO);
+	free(ctx->error);
+	ctx->error = NULL;
+	ctx->f_export += 1;
 }

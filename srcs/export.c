@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 17:27:05 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/15 16:22:04 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/20 18:55:25 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,9 @@ static bool	check_name_export(t_context *ctx, char *var, int i)
 		error_malloc(ctx);
 	while (var[i])
 	{
-		if (var[0] != '=' && (ft_isalnum(var[i]) == 1
+		if (i == 0 && ft_isdigit(var[0]))
+			return (export_not_valid(ctx), false);
+		else if (var[0] != '=' && (ft_isalnum(var[i]) == 1
 				|| var[i] == '_' ))
 			i++;
 		else if (var[i] == '=' && i > 0)

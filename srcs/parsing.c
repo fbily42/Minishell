@@ -6,13 +6,13 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 15:22:45 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/19 14:50:50 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/20 18:55:57 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern int g_minishell_exit[2];
+extern int	g_minishell_exit[2];
 
 t_node	*parsing(char *line, t_context *ctx)
 {

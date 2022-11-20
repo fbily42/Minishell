@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 20:35:31 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/18 23:30:56 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/20 18:55:26 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ bool			is_built_in(t_node *tree);
 
 /**************		UNSET.C		**************/
 char			**unset(char **envp, char *var, t_context *ctx);
+void			export_not_valid(t_context *ctx);
 
 /**************		EXPORT.C		**************/
 void			sort_and_print_env(t_context *ctx);
