@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 20:24:25 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/16 16:05:04 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/21 10:17:35 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,12 @@ void	env(char **envp, int fd)
 	}
 	while (envp[i])
 	{
-		ft_putstr_fd(envp[i++], fd);
-		write(fd, "\n", 1);
+		if (check_var_name(envp[i]) == true)
+		{
+			ft_putstr_fd(envp[i++], fd);
+			write(fd, "\n", 1);
+		}
+		else
+			i++;
 	}
 }

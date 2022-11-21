@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 21:16:10 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/15 16:36:40 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/21 10:00:30 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,10 @@ bool	execute_cd(t_node *tree, t_context *ctx)
 static bool	do_export(t_node *tree, t_context *ctx, int i)
 {
 	if (tree->data.c.value[1] != NULL)
+	{
 		while (tree->data.c.value[i])
 			ctx->envp = export(ctx->envp, tree->data.c.value[i++], ctx);
+	}
 	else if (*ctx->envp)
 		sort_and_print_env(ctx);
 	if (ctx->f_export != 0)

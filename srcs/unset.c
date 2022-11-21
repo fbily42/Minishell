@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 20:38:13 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/20 18:55:24 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/21 10:21:43 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,4 +90,21 @@ void	export_not_valid(t_context *ctx)
 	free(ctx->error);
 	ctx->error = NULL;
 	ctx->f_export += 1;
+}
+
+void	env_2(char **envp, int fd)
+{
+	int	i;
+
+	i = 0;
+	if (!*envp)
+	{
+		write(fd, "\n", 1);
+		return ;
+	}
+	while (envp[i])
+	{
+		ft_putstr_fd(envp[i++], fd);
+		write(fd, "\n", 1);
+	}
 }

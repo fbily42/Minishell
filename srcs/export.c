@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 17:27:05 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/20 18:55:25 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/21 10:21:20 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,6 @@ char	**export(char **envp, char *var, t_context *ctx)
 	to_find = find_var(var);
 	if (!to_find)
 		error_malloc(ctx);
-	if (check_var_name(var) == false)
-		return (envp);
 	if (!*envp)
 		new_env = create_env(var);
 	else if (is_in_env(envp, to_find) == false)

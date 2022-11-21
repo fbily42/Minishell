@@ -6,7 +6,7 @@
 /*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 21:10:43 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/18 23:46:47 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/21 10:22:20 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ void	sort_and_print_env(t_context *ctx)
 	sort_env(ctx, sorted);
 	add_prefixe(sorted);
 	if (ctx->pipe[STDOUT_FILENO] > 2)
-		env(sorted, ctx->pipe[STDOUT_FILENO]);
+		env_2(sorted, ctx->pipe[STDOUT_FILENO]);
 	else
-		env(sorted, STDOUT_FILENO);
+		env_2(sorted, STDOUT_FILENO);
 	free_2d(sorted);
 }
