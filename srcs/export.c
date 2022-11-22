@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 17:27:05 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/21 10:21:20 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/21 10:49:55 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,11 @@ static bool	check_name_export(t_context *ctx, char *var, int i)
 	ctx->error = strjoin_and_free_s1(ctx->error, ": not a valid indetifier\n");
 	if (!ctx->error)
 		error_malloc(ctx);
+	if (ft_isdigit(var[0]) || var[0] == '=')
+		return (export_not_valid(ctx), false);
 	while (var[i])
 	{
-		if (i == 0 && ft_isdigit(var[0]))
-			return (export_not_valid(ctx), false);
-		else if (var[0] != '=' && (ft_isalnum(var[i]) == 1
+		if ((ft_isalnum(var[i]) == 1
 				|| var[i] == '_' ))
 			i++;
 		else if (var[i] == '=' && i > 0)

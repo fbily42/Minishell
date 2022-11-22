@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 17:00:33 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/11 21:06:38 by fbily            ###   ########.fr       */
+/*   Updated: 2022/11/21 11:14:28 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,13 +118,22 @@ void	execute_cmd(t_node *tree, t_context *ctx)
 {
 	if (find_cmd(tree, ctx) == true)
 	{
-		ctx->error = ft_strjoin("PopCornShell : ", tree->data.c.value[0]);
+		ctx->error = ft_strjoin("PopCornShell: ", tree->data.c.value[0]);
 		if (!ctx->error)
 			error_malloc(ctx);
 		if (access(ctx->cmd, X_OK) == 0)
 		{
 			execve(ctx->cmd, tree->data.c.value, ctx->envp);
-			perror("execve");
+			if (ctx->cmd[0] != '/')
+				perror("execve");
+			else
+			{
+				ctx->error = strjoin_and_free_s1(ctx->error,
+						": Is a directory\n");
+				if (!ctx->error)
+					error_malloc(ctx);
+				ft_putstr_fd(ctx->error, STDERR_FILENO);
+			}
 		}
 		else
 			perror(ctx->error);

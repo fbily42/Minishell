@@ -6,11 +6,13 @@
 /*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 11:03:15 by sbeylot           #+#    #+#             */
-/*   Updated: 2022/11/19 14:48:31 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/21 11:00:03 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+extern int	g_minishell_exit[2];
 
 static int	token_var_exist(char *str, char **envp, int len)
 {
@@ -73,7 +75,10 @@ int	add_token(t_token **tokens, t_token *token, t_context *ctx)
 	if (is_single_dollar(token) && \
 			!token_var_exist(token->location.start, ctx->envp, \
 				var_len(token->location.start)))
+	{
+		g_minishell_exit[0] = 0;
 		return (free(token), 1);
+	}
 	if (*tokens == NULL)
 		*tokens = token;
 	else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_built_in.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 21:16:10 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/21 10:00:30 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/21 10:28:50 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ bool	exec_built_in(t_node *tree, t_context *ctx, int fd)
 			return (true);
 		return (false);
 	}
-	else if (exec_unset_export_exit(tree, ctx) == true)
+	else if (exec_unset_export_exit(tree, ctx, fd) == true)
 		return (true);
 	return (false);
 }
@@ -85,7 +85,7 @@ bool	execute_cd(t_node *tree, t_context *ctx)
 	return (true);
 }
 
-static bool	do_export(t_node *tree, t_context *ctx, int i)
+static bool	do_export(t_node *tree, t_context *ctx, int i, int fd)
 {
 	if (tree->data.c.value[1] != NULL)
 	{
@@ -93,13 +93,13 @@ static bool	do_export(t_node *tree, t_context *ctx, int i)
 			ctx->envp = export(ctx->envp, tree->data.c.value[i++], ctx);
 	}
 	else if (*ctx->envp)
-		sort_and_print_env(ctx);
+		sort_and_print_env(ctx, fd);
 	if (ctx->f_export != 0)
 		return (false);
 	return (true);
 }
 
-bool	exec_unset_export_exit(t_node *tree, t_context *ctx)
+bool	exec_unset_export_exit(t_node *tree, t_context *ctx, int fd)
 {
 	int	i;
 
@@ -115,7 +115,7 @@ bool	exec_unset_export_exit(t_node *tree, t_context *ctx)
 	}
 	else if (ft_strcmp(tree->data.c.value[0], "export") == 0)
 	{
-		if (do_export(tree, ctx, i) == false)
+		if (do_export(tree, ctx, i, fd) == false)
 			return (false);
 		return (true);
 	}

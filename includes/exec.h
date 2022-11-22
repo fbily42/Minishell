@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 20:35:31 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/21 10:22:04 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/21 10:29:38 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void			check_arg_exit(t_context *ctx, char *str, long long *exit_code);
 void			ft_exit(t_context *ctx, char **args);
 
 /**************		EXEC_BUILT_IN.C		**************/
-bool			exec_unset_export_exit(t_node *tree, t_context *ctx);
+bool			exec_unset_export_exit(t_node *tree, t_context *ctx, int fd);
 bool			exec_built_in(t_node *tree, t_context *ctx, int fd);
 bool			execute_cd(t_node *tree, t_context *ctx);
 bool			is_built_in(t_node *tree);
@@ -96,7 +96,7 @@ void			export_not_valid(t_context *ctx);
 void			env_2(char **envp, int fd);
 
 /**************		EXPORT.C		**************/
-void			sort_and_print_env(t_context *ctx);
+void			sort_and_print_env(t_context *ctx, int fd);
 char			**export(char **envp, char *var, t_context *ctx);
 
 /**************		BUILT_IN_UTILS.C		**************/

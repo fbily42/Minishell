@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbily <fbily@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sbeylot <sbeylot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 21:10:43 by fbily             #+#    #+#             */
-/*   Updated: 2022/11/21 10:22:20 by sbeylot          ###   ########.fr       */
+/*   Updated: 2022/11/21 10:29:01 by sbeylot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static void	sort_env(t_context *ctx, char **sorted)
 	}
 }
 
-void	sort_and_print_env(t_context *ctx)
+void	sort_and_print_env(t_context *ctx, int fd)
 {
 	char	**sorted;
 
@@ -88,9 +88,6 @@ void	sort_and_print_env(t_context *ctx)
 		error_malloc(ctx);
 	sort_env(ctx, sorted);
 	add_prefixe(sorted);
-	if (ctx->pipe[STDOUT_FILENO] > 2)
-		env_2(sorted, ctx->pipe[STDOUT_FILENO]);
-	else
-		env_2(sorted, STDOUT_FILENO);
+	env_2(sorted, fd);
 	free_2d(sorted);
 }
