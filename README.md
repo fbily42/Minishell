@@ -1,6 +1,6 @@
 # Minishell
 
-Small shell done in collaboration with [Simon Beylot](https://github.com/bCigueS)
+Small shell done in collaboration with [Simon Beylot](https://github.com/bCigueS) (see subject.pdf)
 
 
 ![minishell](./image/minishell.png)
